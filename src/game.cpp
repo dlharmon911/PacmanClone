@@ -2,6 +2,12 @@
 
 namespace pacman
 {
+	namespace game
+	{
+
+	}
+
+
 	typedef struct game_t
 	{
 		int8_t grid[game::grid::width * game::grid::height];
@@ -9,6 +15,48 @@ namespace pacman
 
 	namespace game
 	{
+		//bool create_sprite_list()
+		//{
+		//	sprite::layer_t sprite_layers[] =
+		//	{
+		//		{ game::color::pacman, {0x61, 0x62, 0x63, 0x64}},
+		//		{ game::color::pacman, {0x65, 0x66, 0x67, 0x68}},
+		//		{ game::color::pacman, {0x69, 0x6a, 0x6b, 0x6c}},
+		//		{ game::color::pacman, {0x6e, 0x6e, 0x6f, 0x70}},
+		//		{ game::color::pacman, {0x71, 0x72, 0x73, 0x74}}
+		//	};
+
+		//	sprite_indices_t sprite_indices[] =
+		//	{
+		//		{0, 1},
+		//		{1, 1},
+		//		{2, 1},
+		//		{3, 1},
+		//		{4, 1}
+		//	};
+
+		//	enum class sprite_name
+		//	{
+		//		pacman_frame_00,
+		//		pacman_frame_01,
+		//		pacman_frame_02,
+		//		pacman_frame_03,
+		//		pacman_frame_04,
+		//	};
+
+		//	if (!m_sprite_list)
+		//	{
+		//		m_sprite_list = new sprite_list_t;
+		//		if (m_sprite_list)
+		//		{
+		//			m_sprite_list->m_layers = sprite_layers;
+		//			m_sprite_list->m_indices = sprite_indices;
+		//		}
+		//	}
+		//	
+		//	return m_sprite_list != nullptr;
+		//}
+
 		game_t* create()
 		{
 			game_t* game = new game_t;
@@ -66,7 +114,6 @@ namespace pacman
 					console::text::out(console, ch);
 				}
 			}
-
 		}
 
 		void reset(game_t* game)
@@ -216,44 +263,6 @@ namespace pacman
 		void modify_game_font(font_t* font)
 		{
 			set_glyph(font, 0x20, "0000000000000000"); // empty
-			set_glyph(font, 0x80, "0f30404788909090"); // wall 00
-			set_glyph(font, 0x81, "ff0000ff00000000"); // wall 01
-			set_glyph(font, 0x82, "ff0000e010080808"); // wall 02
-			set_glyph(font, 0x83, "ff00000708101010"); // wall 03
-			set_glyph(font, 0x84, "f00c02e211090909"); // wall 04
-			set_glyph(font, 0x85, "9090909090909090"); // wall 05
-			set_glyph(font, 0x86, "0808080808080808"); // wall 06
-			set_glyph(font, 0x87, "1010101010101010"); // wall 07
-			set_glyph(font, 0x88, "0909090909090909"); // wall 08
-			set_glyph(font, 0x89, "0000000003040808"); // wall 09
-			set_glyph(font, 0x8a, "00000000ff000000"); // wall 10
-			set_glyph(font, 0x8b, "00000000c0201010"); // wall 11
-			set_glyph(font, 0x8c, "0808040300000000"); // wall 12
-			set_glyph(font, 0x8d, "000000ff00000000"); // wall 13
-			set_glyph(font, 0x8e, "101020c000000000"); // wall 14
-			set_glyph(font, 0x8f, "000000e010080808"); // wall 15
-			set_glyph(font, 0x90, "0000000708101010"); // wall 16
-			set_glyph(font, 0x91, "909090884740300f"); // wall 17
-			set_glyph(font, 0x92, "00000000ff0000ff"); // wall 18
-			set_glyph(font, 0x93, "1010100807000000"); // wall 19
-			set_glyph(font, 0x94, "08080810e0000000"); // wall 20
-			set_glyph(font, 0x95, "09090911e2020cf0"); // wall 21
-			set_glyph(font, 0x96, "000000000f080809"); // wall 22
-			set_glyph(font, 0x97, "00000000ff0101ff"); // wall 23
-			set_glyph(font, 0x98, "00000000ff8080ff"); // wall 24
-			set_glyph(font, 0x99, "00000000f0101090"); // wall 25
-			set_glyph(font, 0x9a, "0908080f00000000"); // wall 26
-			set_glyph(font, 0x9b, "901010f000000000"); // wall 27
-			set_glyph(font, 0x9c, "9090908887808080"); // wall 28
-			set_glyph(font, 0x9d, "09090911e1010101"); // wall 30
-			set_glyph(font, 0x9e, "8080808788909090"); // wall 31
-			set_glyph(font, 0x9f, "010101e111090909"); // wall 32
-			set_glyph(font, 0xa0, "0000001818000000"); // dot
-			set_glyph(font, 0xa1, "0000000000ffff00"); // door
-			set_glyph(font, 0xa2, "3c7effffffff7e3c"); // big dot
-
-
-			set_glyph(font, 0x20, "0000000000000000");
 			set_glyph(font, 0x21, "183c3c3c18180018");
 			set_glyph(font, 0x22, "6c6c6c0000000000");
 			set_glyph(font, 0x23, "6c6cfe6cfe6c6c00");
@@ -317,15 +326,76 @@ namespace pacman
 			set_glyph(font, 0x5d, "7818181818187800");
 			set_glyph(font, 0x5e, "10386cc600000000");
 			set_glyph(font, 0x5f, "00000000000000ff");
-
 			set_glyph(font, 0x60, "3c4299a1a199423c"); //copyright symbol
 
-			set_glyph(font, 0x61, "00071f3f3f7f7f7f"); // top left
-			set_glyph(font, 0x62, "00e0f8fcfcfefefe"); // top right
-			set_glyph(font, 0x63, "7f7f7f3f3f1f0700"); // bottom left
-			set_glyph(font, 0x64, "fefefefcfcf8e000"); // bottom right
+			// pacman whole
+			set_glyph(font, 0x61, "00030f1f3f3f7f7f"); // top left
+			set_glyph(font, 0x62, "00c0f0f8fcfcfefe"); // top right
+			set_glyph(font, 0x63, "7f7f3f3f1f0f0300"); // bottom left
+			set_glyph(font, 0x64, "fefefcfcf8f0c000"); // bottom right
+
+			// pacman facing right partly open
+			set_glyph(font, 0x65, "00030f1f3f3f7f7e"); // top left
+			set_glyph(font, 0x66, "00e0f8fcfce08000"); // top right
+			set_glyph(font, 0x67, "7e7f3f3f1f0f0300"); // bottom left
+			set_glyph(font, 0x68, "0080e0fcfcf8e000"); // bottom right
+
+			// pacman facing right wholly open
+			set_glyph(font, 0x69, "00071f3f3f7e7c78"); // top left
+			set_glyph(font, 0x6a, "00c0c08000000000"); // top right
+			set_glyph(font, 0x6b, "787c7e3f3f1f0700"); // bottom left
+			set_glyph(font, 0x6c, "0000000080c0c000"); // bottom right
 
 
+			// pacman facing down partly open
+			set_glyph(font, 0x6d, "00030f1f3f3f7f7e"); // top left
+			set_glyph(font, 0x6e, "00c0f0f8fcfcfe7e"); // top right
+			set_glyph(font, 0x6f, "7e7c7c3838180000"); // bottom left
+			set_glyph(font, 0x70, "7e3e3e1c1c180000"); // bottom right
+
+			// pacman facing down wholly open
+			set_glyph(font, 0x71, "00071f3f3f7e7c78"); // top left
+			set_glyph(font, 0x72, "00e0f8fcfc7e3e1e"); // top right
+			set_glyph(font, 0x73, "7060000000000000"); // bottom left
+			set_glyph(font, 0x74, "0e06000000000000"); // bottom right
+
+
+
+			set_glyph(font, 0x80, "0f30404788909090"); // wall 00
+			set_glyph(font, 0x81, "ff0000ff00000000"); // wall 01
+			set_glyph(font, 0x82, "ff0000e010080808"); // wall 02
+			set_glyph(font, 0x83, "ff00000708101010"); // wall 03
+			set_glyph(font, 0x84, "f00c02e211090909"); // wall 04
+			set_glyph(font, 0x85, "9090909090909090"); // wall 05
+			set_glyph(font, 0x86, "0808080808080808"); // wall 06
+			set_glyph(font, 0x87, "1010101010101010"); // wall 07
+			set_glyph(font, 0x88, "0909090909090909"); // wall 08
+			set_glyph(font, 0x89, "0000000003040808"); // wall 09
+			set_glyph(font, 0x8a, "00000000ff000000"); // wall 10
+			set_glyph(font, 0x8b, "00000000c0201010"); // wall 11
+			set_glyph(font, 0x8c, "0808040300000000"); // wall 12
+			set_glyph(font, 0x8d, "000000ff00000000"); // wall 13
+			set_glyph(font, 0x8e, "101020c000000000"); // wall 14
+			set_glyph(font, 0x8f, "000000e010080808"); // wall 15
+			set_glyph(font, 0x90, "0000000708101010"); // wall 16
+			set_glyph(font, 0x91, "909090884740300f"); // wall 17
+			set_glyph(font, 0x92, "00000000ff0000ff"); // wall 18
+			set_glyph(font, 0x93, "1010100807000000"); // wall 19
+			set_glyph(font, 0x94, "08080810e0000000"); // wall 20
+			set_glyph(font, 0x95, "09090911e2020cf0"); // wall 21
+			set_glyph(font, 0x96, "000000000f080809"); // wall 22
+			set_glyph(font, 0x97, "00000000ff0101ff"); // wall 23
+			set_glyph(font, 0x98, "00000000ff8080ff"); // wall 24
+			set_glyph(font, 0x99, "00000000f0101090"); // wall 25
+			set_glyph(font, 0x9a, "0908080f00000000"); // wall 26
+			set_glyph(font, 0x9b, "901010f000000000"); // wall 27
+			set_glyph(font, 0x9c, "9090908887808080"); // wall 28
+			set_glyph(font, 0x9d, "09090911e1010101"); // wall 30
+			set_glyph(font, 0x9e, "8080808788909090"); // wall 31
+			set_glyph(font, 0x9f, "010101e111090909"); // wall 32
+			set_glyph(font, 0xa0, "0000001818000000"); // dot
+			set_glyph(font, 0xa1, "0000000000ffff00"); // door
+			set_glyph(font, 0xa2, "3c7effffffff7e3c"); // big dot
 
 		}
 

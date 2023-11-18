@@ -4,9 +4,6 @@ namespace pacman
 {
 	namespace application
 	{
-		sprite_t* pacman = nullptr;
-
-
 		namespace padding
 		{
 			static constexpr float width = 4.0f;
@@ -31,7 +28,7 @@ namespace pacman
 		bool m_kill = false;
 		int32_t m_counter = 0;
 
-		static constexpr dim_t DISPLAY_SIZE = { 800.0f, 600.0f };
+		static constexpr dim_t DISPLAY_SIZE = { 504.0f, 648.0f };
 		static constexpr dim_t BUFFER_SIZE = { (float)(game::grid::width << 3), (float)(game::grid::height << 3) };
 		static constexpr double TIMING = 60.0;
 		static constexpr const char* APPNAME = "Pacman Clone";
@@ -116,7 +113,7 @@ namespace pacman
 		}
 
 		std::cout << "Creating Bitmap Buffer: ";
-		m_buffer = al_create_bitmap(application::BUFFER_SIZE.x + ((int32_t)padding::width << 1), application::BUFFER_SIZE.y + ((int32_t)padding::height << 1));
+		m_buffer = al_create_bitmap(application::BUFFER_SIZE.x, application::BUFFER_SIZE.y);
 		if (!m_buffer)
 		{
 			std::cout << "failed" << std::endl;
@@ -179,15 +176,9 @@ namespace pacman
 		std::cout << "pass" << std::endl;
 
 		game::set_palette(m_console);
-		//game::draw(m_console, m_game);
 		game::modify_game_font(m_font_game);
 
-		sprite::layer_t p[] =
-		{
-			{ game::color::pacman, {0x61, 0x62, 0x63, 0x64}},
-			{ -1, {0x61, 0x62, 0x63, 0x64}}
-		};
-		pacman = sprite::create(p);
+		console::font::set(m_console, m_font_game);
 
 		al_register_event_source(m_event_queue, al_get_display_event_source(m_display));
 		al_register_event_source(m_event_queue, al_get_timer_event_source(m_timer));
@@ -269,8 +260,6 @@ namespace pacman
 
 	int32_t application::loop()
 	{
-		ALLEGRO_TRANSFORM backup;
-		ALLEGRO_TRANSFORM t;
 		static bitmap_t* target = nullptr;
 		static dim_t display_size = { 0.0f, 0.0f };
 		static dim_t buffer_size = { 0.0f, 0.0f };
@@ -280,8 +269,8 @@ namespace pacman
 			buffer_size = dim_t(al_get_bitmap_width(m_buffer), al_get_bitmap_height(m_buffer));
 			display_size = dim_t(al_get_display_width(m_display), al_get_display_height(m_display));
 
-			float y = display_size.y / buffer_size.y;
-			float x = display_size.x / buffer_size.x;
+			float y = display_size.y / (buffer_size.y + (2.0f * padding::width));
+			float x = display_size.x / (buffer_size.x+ (2.0f * padding::height));
 			float a = y;
 
 			if (y > x)
@@ -300,14 +289,10 @@ namespace pacman
 
 			target = al_get_target_bitmap();
 			al_set_target_bitmap(m_buffer);
-			al_copy_transform(&backup, al_get_current_transform());
-			al_identity_transform(&t);
-			al_translate_transform(&t, padding::width, padding::height);
-			al_use_transform(&t);
+
 
 			draw();
 
-			al_use_transform(&backup);
 			al_set_target_bitmap(target);
 			al_draw_scaled_bitmap(m_buffer,
 				0.0f,
@@ -331,21 +316,16 @@ namespace pacman
 	void application::draw()
 	{
 		pacman::font_t* font = m_font_game;
-		game::draw(m_console, m_game);
-
 
 		if (input::keyboard::m_button[ALLEGRO_KEY_LSHIFT].m_is_pressed)
 		{
 			font = m_font_default;
 		}
 
-		console::draw(m_console, font, { 0.0f, 0.0f });
+		console::font::set(m_console, m_font_game);
 
-		if (pacman)
-		{
-			sprite::draw(m_console, font, pacman, {104.0f, 204.0f });
-		}
-
+		game::draw(m_console, m_game);
+		console::draw(m_console, { 0.0f, 0.0f });
 	}
 
 	void application::logic()

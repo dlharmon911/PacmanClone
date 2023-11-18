@@ -2,67 +2,38 @@
 
 namespace pacman
 {
-	typedef struct sprite_t
-	{
-		sprite::layer_t* layers;
-		int32_t count;
-	} sprite_t;
-
 	namespace sprite
 	{
-		sprite_t* create(const layer_t* layers)
+		void draw(console_t* console, const sprite_t* sprite, const point_t& point, int32_t flags)
 		{
-			sprite_t* sprite = nullptr;
-			int32_t count = 0;
-			while (layers[count].color_index >= 0)
-			{
-				++count;
-			}
-
-			if (layers && count)
-			{
-				sprite = new sprite_t;
-				if (sprite)
-				{
-					sprite->layers = new layer_t[count];
-					if (sprite->layers)
-					{
-						sprite->count = count;
-						for (int32_t layer = 0; layer < count; ++layer)
-						{
-							sprite->layers[layer].color_index = layers[layer].color_index;
-							for (int32_t c = 0; c < 4; ++c)
-							{
-								sprite->layers[layer].character[c] = layers[layer].character[c];
-							}
-						}
-					}
-					else
-					{
-						delete sprite;
-						sprite = nullptr;
-					}
-				}
-			}
-
-			return sprite;
+			draw(console, sprite->m_layers, sprite->m_start, sprite->m_count, point, flags);
 		}
 
-		void destroy(sprite_t* sprite)
+		void draw(console_t* console, const layer_t* layers, int32_t start, int32_t count, const point_t& point, int32_t flags)
 		{
-			if (sprite)
-			{
-				if (sprite->layers)
-				{
-					delete[] sprite->layers;
-				}
-				delete sprite;
-			}
-		}
+			const font_t* font = console::font::get(console);
+			ALLEGRO_TRANSFORM backup;
+			ALLEGRO_TRANSFORM t;
 
-		void draw(console_t* console, const font_t* font, const sprite_t* sprite, const point_t& point)
-		{
-			for (int32_t layer = 0; layer < sprite->count; ++layer)
+			al_copy_transform(&backup, al_get_current_transform());
+			al_identity_transform(&t);
+			al_translate_transform(&t, -point.x, -point.y);
+
+			if (flags & draw_flags::flip_horizontal)
+			{
+				al_scale_transform(&t, -1.0f, 1.0f);
+				al_translate_transform(&t, 16.0f, 0.0f);
+			}
+
+			if (flags & draw_flags::flip_vertical)
+			{
+				al_scale_transform(&t, 1.0f, -1.0f);
+				al_translate_transform(&t, 0.0f, 16.0f);
+			}
+
+			al_translate_transform(&t, point.x, point.y);
+			al_use_transform(&t);
+			for (int32_t layer = 0; layer < count; ++layer)
 			{
 				int index = 0;
 				for (int32_t j = 0; j < 2; ++j)
@@ -73,13 +44,14 @@ namespace pacman
 						p.x += i * 8.0f;
 						p.y += j * 8.0f;
 
-						color_t color = color::map_rgba(console::palette::get(console, sprite->layers[layer].color_index));
-						uint8_t c = sprite->layers[layer].character[index];
-						pacman::font::draw(font, color, p, sprite->layers[layer].character[index]);
+						color_t color = color::map_rgba(console::palette::get(console, layers[layer + start].color_index));
+						uint8_t c = layers[layer + start].character[index];
+						pacman::font::draw(font, color, p, layers[layer + start].character[index]);
 						++index;
 					}
 				}
 			}
+			al_use_transform(&backup);
 		}
 	}
 

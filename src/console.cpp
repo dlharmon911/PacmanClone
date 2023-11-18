@@ -20,13 +20,14 @@ namespace pacman
 
 	typedef struct console_t
 	{
-		console::cursor_t m_cursor;
-		int8_t m_background;
-		int8_t m_foreground;
-		console::cell_t* m_data;
-		int8_t m_width;
-		int8_t m_height;
-		console::palette_t m_palette;
+		console::cursor_t m_cursor = { 0.0f, 0.0f };
+		int8_t m_background = 0;
+		int8_t m_foreground = 15;
+		console::cell_t* m_data = nullptr;
+		const font_t* m_font = nullptr;
+		int8_t m_width = 40;
+		int8_t m_height = 25;
+		console::palette_t m_palette{};
 	} console_t;
 
 	namespace console
@@ -119,6 +120,19 @@ namespace pacman
 			void set(console_t* console, const console::cursor_t& cursor)
 			{
 				console->m_cursor = cursor;
+			}
+		}
+
+		namespace font
+		{
+			void set(console_t* console, font_t* font)
+			{
+				console->m_font = font;
+			}
+
+			const font_t* get(const console_t* console)
+			{
+				return console->m_font;
 			}
 		}
 
@@ -219,7 +233,7 @@ namespace pacman
 			//}
 		}
 
-		void draw(const console_t* console, const font_t* font, const point_t& point)
+		void draw(const console_t* console, const point_t& point)
 		{
 			point_t cursor = point;
 
@@ -230,10 +244,10 @@ namespace pacman
 					cursor.x = point.x + cell::width * (float)i;
 					cursor.y = point.y + cell::height * (float)j;
 					const console::cell_t& cell = console->m_data[i + j * console->m_width];
-					font::draw(font, pacman::color::map_rgba(console->m_palette[cell.m_background]), cursor, 219);
+					pacman::font::draw(console->m_font, pacman::color::map_rgba(console->m_palette[cell.m_background]), cursor, 219);
 					if (cell.m_data != ' ')
 					{
-						font::draw(font, pacman::color::map_rgba(console->m_palette[cell.m_foreground]), cursor, cell.m_data);
+						pacman::font::draw(console->m_font, pacman::color::map_rgba(console->m_palette[cell.m_foreground]), cursor, cell.m_data);
 					}
 				}
 			}
