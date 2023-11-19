@@ -12,9 +12,9 @@ namespace pacman
 
 		typedef struct cell_t
 		{
-			int8_t m_background;
-			int8_t m_foreground;
-			uint8_t m_data;
+			int8_t m_background{ 0 };
+			int8_t m_foreground{ 0 };
+			uint8_t m_data{ 0 };
 		} cell_t;
 	}
 

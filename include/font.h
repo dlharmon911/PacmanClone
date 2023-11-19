@@ -3,7 +3,6 @@
 
 #include <fstream>
 #include "base.h"
-#include "hex.h"
 #include "color.h"
 
 namespace pacman

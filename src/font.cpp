@@ -1,4 +1,5 @@
 #include "font.h"
+#include "hex.h"
 
 namespace pacman
 {

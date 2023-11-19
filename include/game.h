@@ -5,18 +5,26 @@
 #include "font.h"
 #include "console.h"
 #include "sprite.h"
-#include "sprite_list.h"
-#include "color_list.h"
+#include "game_color_list.h"
+#include "game_sprite_list.h"
+#include "game_player.h"
+#include "game_grid.h"
 
 namespace pacman
 {
 	typedef struct game_t game_t;
 	namespace game
 	{
-		namespace grid
+
+		game_t* create();
+		void destroy(game_t* game);
+		void reset(game_t* game);
+		void update(game_t* game);
+
+
+		namespace input
 		{
-			static constexpr int32_t width = 28;
-			static constexpr int32_t height = 36;
+			void keypressed(game_t* game, int32_t direction);
 		}
 
 		namespace font
@@ -24,16 +32,12 @@ namespace pacman
 			font_t* create();
 		}
 
-		game_t* create();
-		void destroy(game_t* game);
-		void reset(game_t* game);
-
 		namespace palette
 		{
 			void set(console_t* console);
 		}
 
-		namespace console
+		namespace gfx
 		{
 			void draw_grid(console_t* console, const game_t* game);
 			void draw_sprites(console_t* console, const game_t* game);

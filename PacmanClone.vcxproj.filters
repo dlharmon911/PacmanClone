@@ -54,10 +54,19 @@
     <ClInclude Include="include\sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\sprite_list.h">
+    <ClInclude Include="include\game_color_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\color_list.h">
+    <ClInclude Include="include\game_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game_sprite_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game_grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game_defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,7 +98,13 @@
     <ClCompile Include="src\sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\sprite_list.cpp">
+    <ClCompile Include="src\game_player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_sprite_list.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

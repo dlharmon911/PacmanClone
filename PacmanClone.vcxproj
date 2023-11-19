@@ -138,16 +138,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\color.h" />
-    <ClInclude Include="include\color_list.h" />
     <ClInclude Include="include\console.h" />
     <ClInclude Include="include\font.h" />
     <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\game_color_list.h" />
+    <ClInclude Include="include\game_defines.h" />
+    <ClInclude Include="include\game_grid.h" />
+    <ClInclude Include="include\game_player.h" />
+    <ClInclude Include="include\game_sprite_list.h" />
     <ClInclude Include="include\hex.h" />
     <ClInclude Include="include\base.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\pacman.h" />
     <ClInclude Include="include\sprite.h" />
-    <ClInclude Include="include\sprite_list.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -156,11 +159,13 @@
     <ClCompile Include="src\console.cpp" />
     <ClCompile Include="src\font.cpp" />
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\game_grid.cpp" />
+    <ClCompile Include="src\game_player.cpp" />
+    <ClCompile Include="src\game_sprite_list.cpp" />
     <ClCompile Include="src\hex.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\sprite.cpp" />
-    <ClCompile Include="src\sprite_list.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="logs\output.txt" />

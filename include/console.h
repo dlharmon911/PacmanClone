@@ -2,7 +2,6 @@
 #define _PACMAN_CONSOLE_H_
 
 #include "base.h"
-#include "color.h"
 #include "font.h"
 
 namespace pacman

@@ -289,7 +289,6 @@ namespace pacman
 				target = al_get_target_bitmap();
 				al_set_target_bitmap(m_buffer);
 
-
 				draw();
 
 				al_set_target_bitmap(target);
@@ -314,9 +313,9 @@ namespace pacman
 
 		void draw()
 		{
-			game::console::draw_grid(m_console, m_game);
+			game::gfx::draw_grid(m_console, m_game);
 			console::draw(m_console, { 0.0f, 0.0f });
-			game::console::draw_sprites(m_console, m_game);
+			game::gfx::draw_sprites(m_console, m_game);
 		}
 
 		void logic()
@@ -325,6 +324,39 @@ namespace pacman
 			{
 				m_kill = true;
 			}
+
+			if (input::keyboard::m_button[ALLEGRO_KEY_UP].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_W].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_PAD_8].m_was_pressed)
+			{
+				game::input::keypressed(m_game, game::direction::up);
+			}
+
+			if (input::keyboard::m_button[ALLEGRO_KEY_DOWN].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_S].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_PAD_2].m_was_pressed)
+			{
+				game::input::keypressed(m_game, game::direction::down);
+			}
+
+			if (input::keyboard::m_button[ALLEGRO_KEY_LEFT].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_A].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_PAD_4].m_was_pressed)
+			{
+				game::input::keypressed(m_game, game::direction::left);
+			}
+
+			if (input::keyboard::m_button[ALLEGRO_KEY_RIGHT].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_D].m_was_pressed ||
+				input::keyboard::m_button[ALLEGRO_KEY_PAD_6].m_was_pressed)
+			{
+				game::input::keypressed(m_game, game::direction::right);
+			}
+
+
+
+
+			game::update(m_game);
 		}
 
 		void input()

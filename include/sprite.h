@@ -17,9 +17,9 @@ namespace pacman
 
 	typedef struct sprite_t
 	{
-		sprite::layer_t* m_layers;
-		int32_t m_begin;
-		int32_t m_end;
+		sprite::layer_t* m_layers{ nullptr };
+		int32_t m_begin{ 0 };
+		int32_t m_end{ 0 };
 	} sprite_t;
 
 	namespace sprite
