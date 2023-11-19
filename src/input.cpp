@@ -1,4 +1,4 @@
-#include "pacman.h"
+#include "input.h"
 
 namespace pacman
 {

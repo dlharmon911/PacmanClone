@@ -137,7 +137,17 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\color.h" />
+    <ClInclude Include="include\color_list.h" />
+    <ClInclude Include="include\console.h" />
+    <ClInclude Include="include\font.h" />
+    <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\hex.h" />
+    <ClInclude Include="include\base.h" />
+    <ClInclude Include="include\input.h" />
     <ClInclude Include="include\pacman.h" />
+    <ClInclude Include="include\sprite.h" />
+    <ClInclude Include="include\sprite_list.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +160,7 @@
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\sprite.cpp" />
+    <ClCompile Include="src\sprite_list.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="logs\output.txt" />

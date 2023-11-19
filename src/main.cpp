@@ -2,7 +2,14 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "pacman.h"
+
+namespace pacman
+{
+	namespace application
+	{
+		int32_t run(const std::vector<std::string>& argList);
+	}
+}
 
 int main(int argc, char** argv)
 {

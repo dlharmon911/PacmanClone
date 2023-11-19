@@ -1,4 +1,4 @@
-#include "pacman.h"
+#include "console.h"
 
 namespace pacman
 {
@@ -37,6 +37,14 @@ namespace pacman
 			console_t* console = new console_t;
 			if (console)
 			{
+				console->m_cursor = { 0.0f, 0.0f };
+				console->m_background = 0;
+				console->m_foreground = 15;
+				console->m_data = nullptr;
+				console->m_font = nullptr;
+				console->m_width = width;
+				console->m_height = height;
+
 				palette_t default_palette =
 				{
 					0x000000ff,
@@ -63,17 +71,14 @@ namespace pacman
 				}
 
 				console->m_data = new cell_t[width * height];
-				if (console->m_data)
+				if (!console->m_data)
 				{
-					console->m_width = width;
-					console->m_height = height;
-					clear(console);
+					console::destroy(console);
+					return nullptr;
 				}
-				else
-				{
-					delete console;
-					console = nullptr;
-				}
+
+				console::clear(console);
+
 			}
 			return console;
 		}
@@ -82,15 +87,20 @@ namespace pacman
 		{
 			if (console)
 			{
+				if (console->m_data)
+				{
+					delete[] console->m_data;
+				}
+
 				delete console;
 			}
 		}
 
 		void clear(console_t* console)
 		{
+			static bitmap_t* target = nullptr;
+
 			console->m_cursor = { 0.0f, 0.0f };
-			console->m_foreground = 15;
-			console->m_background = 1;
 			for (int8_t j = 0; j < console->m_height; ++j)
 			{
 				for (int8_t i = 0; i < console->m_width; ++i)
@@ -145,7 +155,7 @@ namespace pacman
 					console->m_palette[index] = rgba;
 				}
 			}
-			
+
 			void set(console_t* console, const palette_t& palette)
 			{
 				for (int32_t index = 0; index < palette::size; ++index)
@@ -153,7 +163,7 @@ namespace pacman
 					console->m_palette[index] = palette[index];
 				}
 			}
-			
+
 			uint32_t get(const console_t* console, int8_t index)
 			{
 				if (index >= 0 && index < palette::size)

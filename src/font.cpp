@@ -1,7 +1,4 @@
-#include <cstdarg>
-#include <fstream>
-#include <allegro5/allegro5.h>
-#include "pacman.h"
+#include "font.h"
 
 namespace pacman
 {

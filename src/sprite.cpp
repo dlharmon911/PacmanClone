@@ -1,4 +1,4 @@
-#include "pacman.h"
+#include "sprite.h"
 
 namespace pacman
 {
@@ -54,6 +54,4 @@ namespace pacman
 			al_use_transform(&backup);
 		}
 	}
-
-
 }

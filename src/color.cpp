@@ -1,6 +1,6 @@
 #include <limits>
 #include <cmath>
-#include "pacman.h"
+#include "color.h"
 
 namespace pacman
 {

@@ -1,4 +1,4 @@
-#include "pacman.h"
+#include "game.h"
 
 namespace pacman
 {
@@ -15,71 +15,7 @@ namespace pacman
 
 	namespace game
 	{		
-		pacman::sprite::layer_t m_sprite_layers[] =
-		{
-			{ game::color::pacman,	{0x61, 0x62, 0x63, 0x64}}, // 0x00
-			{ game::color::pacman,	{0x65, 0x66, 0x67, 0x68}}, // 0x01
-			{ game::color::pacman,	{0x69, 0x6a, 0x6b, 0x6c}}, // 0x02
-			{ game::color::pacman,	{0x6e, 0x6e, 0x6f, 0x70}}, // 0x03
-			{ game::color::pacman,	{0x71, 0x72, 0x73, 0x74}}, // 0x04
-			{ game::color::blinky,	{0x61, 0x62, 0xa3, 0xa4}}, // 0x05
-			{ game::color::blinky,	{0x61, 0x62, 0xa5, 0xa6}}, // 0x06
-			{ game::color::pinky,	{0x61, 0x62, 0xa3, 0xa4}}, // 0x07
-			{ game::color::pinky,	{0x61, 0x62, 0xa5, 0xa6}}, // 0x08
-			{ game::color::inky,	{0x61, 0x62, 0xa3, 0xa4}}, // 0x09
-			{ game::color::inky,	{0x61, 0x62, 0xa5, 0xa6}}, // 0x0a
-			{ game::color::clyde,	{0x61, 0x62, 0xa3, 0xa4}}, // 0x0b
-			{ game::color::clyde,	{0x61, 0x62, 0xa5, 0xa6}}, // 0x0c
-			
-			{ game::color::wall,	{0x61, 0x62, 0xa3, 0xa4}}, // 0x0d
-			{ game::color::dot,		{0xbd, 0xbe, 0xbf, 0xc0}}, // 0x0e
-			
-			{ game::color::wall,	{0x61, 0x62, 0xa5, 0xa6}}, // 0x0f
-			{ game::color::dot,		{0xbd, 0xbe, 0xbf, 0xc0}}, // 0x10
 
-			{ game::color::eyes,	{0x61, 0x62, 0xa3, 0xa4}}, // 0x11
-			{ game::color::blinky,	{0xbd, 0xbe, 0xbf, 0xc0}}, // 0x12
-			
-			{ game::color::eyes,	{0x61, 0x62, 0xa5, 0xa6}}, // 0x13
-			{ game::color::blinky,	{0xbd, 0xbe, 0xbf, 0xc0}}, // 0x14
-
-			{ game::color::eyes,	{0xa7, 0xa8, 0xa9, 0xaa}}, // 0x15
-			{ game::color::wall,	{0xb5, 0xb6, 0x00, 0x00}}, // 0x16
-
-			{ game::color::eyes,	{0xab, 0xac, 0xad, 0xae}}, // 0x17
-			{ game::color::wall,	{0xb7, 0xb8, 0x00, 0x00}}, // 0x18
-
-			{ game::color::eyes,	{0xaf, 0xb0, 0x00, 0x00}}, // 0x19
-			{ game::color::wall,	{0xb9, 0xba, 0x00, 0x00}}, // 0x20
-
-			{ game::color::eyes,	{0xb1, 0xb2, 0xb3, 0xb4}}, // 0x21
-			{ game::color::wall,	{0x00, 0x00, 0xbb, 0xbc}}, // 0x22
-		};
-
-		sprite_t m_sprites[] =
-		{
-			{ m_sprite_layers, 0x00, 0x00}, // p_f_0
-			{ m_sprite_layers, 0x01, 0x01}, // p_f_1
-			{ m_sprite_layers, 0x02, 0x02}, // p_f_3
-			{ m_sprite_layers, 0x03, 0x03}, // p_f_4
-			{ m_sprite_layers, 0x04, 0x04}, // p_f_5
-			{ m_sprite_layers, 0x05, 0x05}, // g_b_f_0
-			{ m_sprite_layers, 0x06, 0x06}, // g_b_f_1
-			{ m_sprite_layers, 0x07, 0x07}, // g_p_f_0
-			{ m_sprite_layers, 0x08, 0x08}, // g_p_f_1
-			{ m_sprite_layers, 0x09, 0x09}, // g_i_f_0
-			{ m_sprite_layers, 0x0a, 0x0a}, // g_i_f_1
-			{ m_sprite_layers, 0x0b, 0x0b}, // g_c_f_0
-			{ m_sprite_layers, 0x0c, 0x0c}, // g_c_f_1
-			{ m_sprite_layers, 0x0d, 0x0e}, // g_a_f_0
-			{ m_sprite_layers, 0x0f, 0x10}, // g_a_f_1
-			{ m_sprite_layers, 0x11, 0x12}, // g_a_f_2
-			{ m_sprite_layers, 0x13, 0x14}, // g_a_f_3
-			{ m_sprite_layers, 0x15, 0x16}, // g_e_f_0
-			{ m_sprite_layers, 0x17, 0x18}, // g_e_f_1
-			{ m_sprite_layers, 0x19, 0x1a}, // g_e_f_2
-			{ m_sprite_layers, 0x1b, 0x1c}, // g_e_f_3
-		};
 
 		game_t* create()
 		{
@@ -109,29 +45,29 @@ namespace pacman
 				{
 					for (int8_t i = 0; i < grid::width; ++i)
 					{
-						int8_t color = 0;
+						int32_t color = 0;
 						uint8_t ch = game->grid[i + j * grid::width];
 
 						if (ch >= 32 && ch < 0x80)
 						{
-							color = color::text;
+							color = color_list::color_type::white;
 						}
 
 						if (ch >= 0x80 && ch <= 0x9f)
 						{
-							color = color::wall;
+							color = color_list::color_type::blue;
 						}
 						if (ch == 0xa1)
 						{
-							color = color::pinky;
+							color = color_list::color_type::pink;
 						}
 						if (ch == 0xa2) // big dot
 						{
-							color = color::dot;
+							color = color_list::color_type::dot;
 						}
 						if (ch == 0xa0) // dot
 						{
-							color = color::dot;
+							color = color_list::color_type::dot;
 						}
 
 						pacman::console::palette::background::set(console, 0);
@@ -143,7 +79,8 @@ namespace pacman
 
 			void draw_sprites(console_t* console, const game_t* game)
 			{
-				pacman::sprite::draw(console, &m_sprites[sprite::ghost_afraid_frame_00], { 104.0f, 204.0f }, pacman::sprite::draw_flags::none);
+				//player::draw(console, nullptr);
+
 				//pacman::sprite::draw(console, &m_sprites[sprite::ghost_eyes_frame_03], { 104.0f, 204.0f }, pacman::sprite::draw_flags::none);
 			}
 		}
@@ -495,28 +432,31 @@ namespace pacman
 			}
 		}
 
-		void set_palette(console_t* console)
+		namespace palette
 		{
-			pacman::console::palette_t palette =
+			void set(console_t* console)
 			{
-				0x000000ff,		// black
-				0x2121deff,		// wall (blue)
-				0xffff00ff,		// pacman (yellow)
-				0xff0000ff,		// blinky (red)
-				0xffb8deff,		// pinky (pink)
-				0x00ffdeff,		// inky (cyan)
-				0xffbb47ff,		// clyde (orange)
-				0xffbb97ff,		// dot 
-				0xde9747ff,		// cherry_stem (brown),
-				0xdededeff,		// text (white)		
-				0xe0ddffff,		// eyes,
-				0x000000ff,		// undef_11,
-				0x000000ff,		// undef_12,
-				0x000000ff,		// undef_13,
-				0x000000ff,		// undef_14,
-				0x000000ff,		// undef_15
-			};
-			pacman::console::palette::set(console, palette);
+				pacman::console::palette_t palette =
+				{
+					0x000000ff,		// black
+					0x2121deff,		// wall (blue)
+					0xffff00ff,		// pacman (yellow)
+					0xff0000ff,		// blinky (red)
+					0xffb8deff,		// pinky (pink)
+					0x00ffdeff,		// inky (cyan)
+					0xffbb47ff,		// clyde (orange)
+					0xffbb97ff,		// dot 
+					0xde9747ff,		// cherry_stem (brown),
+					0xdededeff,		// text (white)		
+					0xe0ddffff,		// eyes,
+					0x000000ff,		// undef_11,
+					0x000000ff,		// undef_12,
+					0x000000ff,		// undef_13,
+					0x000000ff,		// undef_14,
+					0x000000ff,		// undef_15
+				};
+				pacman::console::palette::set(console, palette);
+			}
 		}
 	}
 }
