@@ -131,13 +131,15 @@ namespace pacman
 		std::cout << "pass" << std::endl;
 
 		std::cout << "Creating Game Font: ";
-		m_font_game = font::create_default();
+		m_font_game = game::font::create();
 		if (!m_font_game)
 		{
 			std::cout << "failed" << std::endl;
 			return -1;
 		}
 		std::cout << "pass" << std::endl;
+
+		font::save_to_file(m_font_game, "text_font.txt");
 
 		std::cout << "Creating Event Queue: ";
 		m_event_queue = al_create_event_queue();
@@ -176,7 +178,6 @@ namespace pacman
 		std::cout << "pass" << std::endl;
 
 		game::set_palette(m_console);
-		game::modify_game_font(m_font_game);
 
 		console::font::set(m_console, m_font_game);
 
@@ -315,17 +316,9 @@ namespace pacman
 
 	void application::draw()
 	{
-		pacman::font_t* font = m_font_game;
-
-		if (input::keyboard::m_button[ALLEGRO_KEY_LSHIFT].m_is_pressed)
-		{
-			font = m_font_default;
-		}
-
-		console::font::set(m_console, m_font_game);
-
-		game::draw(m_console, m_game);
+		game::console::draw_grid(m_console, m_game);
 		console::draw(m_console, { 0.0f, 0.0f });
+		game::console::draw_sprites(m_console, m_game);
 	}
 
 	void application::logic()

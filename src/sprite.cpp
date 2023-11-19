@@ -6,10 +6,10 @@ namespace pacman
 	{
 		void draw(console_t* console, const sprite_t* sprite, const point_t& point, int32_t flags)
 		{
-			draw(console, sprite->m_layers, sprite->m_start, sprite->m_count, point, flags);
+			draw(console, sprite->m_layers, sprite->m_begin, sprite->m_end, point, flags);
 		}
 
-		void draw(console_t* console, const layer_t* layers, int32_t start, int32_t count, const point_t& point, int32_t flags)
+		void draw(console_t* console, const layer_t* layers, int32_t begin, int32_t end, const point_t& point, int32_t flags)
 		{
 			const font_t* font = console::font::get(console);
 			ALLEGRO_TRANSFORM backup;
@@ -33,7 +33,7 @@ namespace pacman
 
 			al_translate_transform(&t, point.x, point.y);
 			al_use_transform(&t);
-			for (int32_t layer = 0; layer < count; ++layer)
+			for (int32_t layer = 0; layer < (1 + (end - begin)); ++layer)
 			{
 				int index = 0;
 				for (int32_t j = 0; j < 2; ++j)
@@ -44,9 +44,9 @@ namespace pacman
 						p.x += i * 8.0f;
 						p.y += j * 8.0f;
 
-						color_t color = color::map_rgba(console::palette::get(console, layers[layer + start].color_index));
-						uint8_t c = layers[layer + start].character[index];
-						pacman::font::draw(font, color, p, layers[layer + start].character[index]);
+						color_t color = color::map_rgba(console::palette::get(console, layers[layer + begin].color_index));
+						uint8_t c = layers[layer + begin].character[index];
+						pacman::font::draw(font, color, p, layers[layer + begin].character[index]);
 						++index;
 					}
 				}

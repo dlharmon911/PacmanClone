@@ -87,8 +87,10 @@ namespace pacman
 	typedef struct font_t font_t;
 	namespace font
 	{
+
 		font_t* create_default();
 		font_t* create_from_data_array(const uint8_t* data, int32_t count, int32_t start = 0x20);
+		bool save_to_file(font_t* font, const std::string& filename);
 		void destroy(font_t* font);
 
 #ifdef INCLUDE_JSON_FONT_FUNCTIONS
@@ -100,9 +102,12 @@ namespace pacman
 		typedef struct glyph_t glyph_t;
 		namespace glyph
 		{
+			static constexpr int32_t size = 8;
+
 			glyph_t* get(font_t* font, int32_t index);
-			bool modify(glyph_t* glyph, const uint8_t* data);
-			bool modify(glyph_t* glyph, const std::string& string_16);
+			bool set(glyph_t* glyph, const uint8_t* data);
+			bool set(glyph_t* glyph, const std::string& string_16);
+			void set(font_t* font, int32_t index, const std::string& string_16);
 		}
 
 		enum class alignment_t
@@ -134,19 +139,18 @@ namespace pacman
 			void set(console_t* console, const console::cursor_t& cursor);
 		}
 
-		namespace palette
-		{
-			static constexpr int32_t size = 16;
-		}
-		using rgba_t = uint32_t;
-		using palette_t = rgba_t[palette::size];
-
 		namespace font
 		{
 			void set(console_t* console, font_t* font);
 			const font_t* get(const console_t* console);
 		}
 
+		namespace palette
+		{
+			static constexpr int32_t size = 16;
+		}
+		using rgba_t = uint32_t;
+		using palette_t = rgba_t[palette::size];
 		namespace palette
 		{
 			void set(console_t* console, int8_t index, uint32_t rgba);
@@ -185,8 +189,8 @@ namespace pacman
 	typedef struct sprite_t
 	{
 		sprite::layer_t* m_layers;
-		int32_t m_start;
-		int32_t m_count;
+		int32_t m_begin;
+		int32_t m_end;
 	} sprite_t;
 
 	namespace sprite
@@ -199,7 +203,7 @@ namespace pacman
 		};
 
 		void draw(console_t* console, const sprite_t* sprite, const point_t& point, int32_t flags = draw_flags::none);
-		void draw(console_t* console, const layer_t* layers, int32_t start, int32_t count, const point_t& point, int32_t flags = draw_flags::none);
+		void draw(console_t* console, const layer_t* layers, int32_t begin, int32_t end, const point_t& point, int32_t flags = draw_flags::none);
 	}
 
 
@@ -236,6 +240,38 @@ namespace pacman
 	typedef struct game_t game_t;
 	namespace game
 	{
+		namespace sprite
+		{
+			static constexpr uint8_t pacman_frame_00 = 0x00;
+			static constexpr uint8_t pacman_frame_01 = 0x01;
+			static constexpr uint8_t pacman_frame_02 = 0x02;
+			static constexpr uint8_t pacman_frame_03 = 0x03;
+			static constexpr uint8_t pacman_frame_04 = 0x04;
+			
+			static constexpr uint8_t ghost_blinky_frame_00 = 0x05;
+			static constexpr uint8_t ghost_blinky_frame_01 = 0x06;
+
+			static constexpr uint8_t ghost_pinky_frame_00 = 0x07;
+			static constexpr uint8_t ghost_pinky_frame_01 = 0x08;
+
+			static constexpr uint8_t ghost_inky_frame_00 = 0x09;
+			static constexpr uint8_t ghost_inky_frame_01 = 0x0a;
+			
+			static constexpr uint8_t ghost_clyde_frame_00 = 0x0b;
+			static constexpr uint8_t ghost_clyde_frame_01 = 0x0c;
+
+			static constexpr uint8_t ghost_afraid_frame_00 = 0x0d;
+			static constexpr uint8_t ghost_afraid_frame_01 = 0x0e;
+			static constexpr uint8_t ghost_afraid_frame_02 = 0x0f;
+			static constexpr uint8_t ghost_afraid_frame_03 = 0x10;
+
+			static constexpr uint8_t ghost_eyes_frame_00 = 0x11;
+			static constexpr uint8_t ghost_eyes_frame_01 = 0x12;
+			static constexpr uint8_t ghost_eyes_frame_02 = 0x13;
+			static constexpr uint8_t ghost_eyes_frame_03 = 0x14;
+
+		};
+
 		namespace color
 		{
 			static constexpr int8_t black = 0;
@@ -248,7 +284,7 @@ namespace pacman
 			static constexpr int8_t dot = 7;			//				0xffbb97
 			static constexpr int8_t cherry_stem = 8;	//			0xde9747
 			static constexpr int8_t text = 9;			// (white)		0xdedede
-			static constexpr int8_t undef_10 = 10;
+			static constexpr int8_t eyes = 10;
 			static constexpr int8_t undef_11 = 11;
 			static constexpr int8_t undef_12 = 12;
 			static constexpr int8_t undef_13 = 13;
@@ -262,12 +298,21 @@ namespace pacman
 			static constexpr int32_t height = 36;
 		}
 
+		namespace font
+		{
+			font_t* create();
+		}
+
 		game_t* create();
 		void destroy(game_t* game);
-		void draw(console_t* console, const game_t* game);
 		void reset(game_t* game);
 		void set_palette(console_t* console);
-		void modify_game_font(font_t* font);
+
+		namespace console
+		{
+			void draw_grid(console_t* console, const game_t* game);
+			void draw_sprites(console_t* console, const game_t* game);
+		}
 	}
 
 	namespace application

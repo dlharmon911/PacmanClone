@@ -244,7 +244,7 @@ namespace pacman
 					cursor.x = point.x + cell::width * (float)i;
 					cursor.y = point.y + cell::height * (float)j;
 					const console::cell_t& cell = console->m_data[i + j * console->m_width];
-					pacman::font::draw(console->m_font, pacman::color::map_rgba(console->m_palette[cell.m_background]), cursor, 219);
+					pacman::font::draw(console->m_font, pacman::color::map_rgba(console->m_palette[cell.m_background]), cursor, 255);
 					if (cell.m_data != ' ')
 					{
 						pacman::font::draw(console->m_font, pacman::color::map_rgba(console->m_palette[cell.m_foreground]), cursor, cell.m_data);
