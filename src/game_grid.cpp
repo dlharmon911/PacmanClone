@@ -119,7 +119,6 @@ namespace pacman
 					grid->m_data[x + y * width] = value;
 				}
 
-
 				uint8_t get(const grid_t* grid, int32_t x, int32_t y)
 				{
 					return grid->m_data[x + y * width];
@@ -153,7 +152,7 @@ namespace pacman
 
 							pacman::console::palette::background::set(console, 0);
 							pacman::console::palette::foreground::set(console, color);
-							pacman::console::text::out(console, value);
+							pacman::console::text::gfx::draw(console, value);
 						}
 					}
 				}

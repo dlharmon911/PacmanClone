@@ -52,9 +52,21 @@ namespace pacman
 				{
 					static constexpr int32_t delta_x[4] = { 0, 0, -1, 1 };
 					static constexpr int32_t delta_y[4] = { -1, 1, 0, 0 };
-
+					static uint8_t cells[4] = { 0, 0, 0, 0 };
 					const int32_t x = ((int32_t)player->m_position.x) >> 3;
 					const int32_t y = ((int32_t)player->m_position.y) >> 3;
+
+					if (player->m_status >= 0)
+					{
+						if (player->m_direction == game::direction::left && x == -1)
+						{
+							player->m_position.x = (float)(grid::width * 8);
+						}
+						if (player->m_direction == game::direction::right && x == grid::width)
+						{
+							player->m_position.x = (float)(-8);
+						}
+					}
 
 					uint8_t cell = grid::cell::get(grid, x, y);
 					int32_t type = grid::cell::type::get(cell);
@@ -67,7 +79,7 @@ namespace pacman
 					case grid::cell::type::door:		break;
 					case grid::cell::type::dot:			
 					{
-						player->m_score -= 90;
+						player->m_score += 10;
 						grid::cell::set(grid, x, y, 0x20);
 					} break;
 					case grid::cell::type::big_dot:
@@ -77,8 +89,22 @@ namespace pacman
 					} break;
 					}
 
-					// check can keep going in same direction
-					cell = grid::cell::get(grid, x + delta_x[player->m_direction], y + delta_y[player->m_direction]);
+					// check can keep going in same direction			
+
+					for (int32_t i = 0; i < 4; ++i)
+					{
+						cells[i] = grid::cell::get(grid, x + delta_x[i], y + delta_y[i]);
+					}
+
+					if (x <= 0 || x >= (grid::width - 1))
+					{
+						cells[0] = 0x80;
+						cells[1] = 0x80;
+						cells[2] = 0x20;
+						cells[3] = 0x20;
+					}
+
+					cell = cells[player->m_direction];
 					type = grid::cell::type::get(cell);
 
 					if (type == grid::cell::type::door ||
@@ -101,6 +127,8 @@ namespace pacman
 							player->m_last_direction_request = -1;
 						}
 					}
+
+
 				}
 
 				if (player->m_status >= 0)
@@ -166,7 +194,10 @@ namespace pacman
 						game::sprite_list::pacman_frame_02
 					};
 					static const int32_t* frames = horizontal_frames;
-					static constexpr point_t position_lives = { 16.0f, 272.0f };
+					static constexpr point_t position_lives = 
+					{
+						(float)font::glyph::size * 2.0f, (float)font::glyph::size* ((float)grid::height - 2.0f)
+					};
 
 					if (player->m_direction == game::direction::up ||
 						player->m_direction == game::direction::down)
@@ -181,18 +212,18 @@ namespace pacman
 					int32_t flags = 0;
 					if (player->m_direction == game::direction::up)
 					{
-						flags = sprite::draw_flags::flip_vertical;
+						flags = pacman::console::sprite::draw_flags::flip_vertical;
 					}
 					if (player->m_direction == game::direction::left)
 					{
-						flags = sprite::draw_flags::flip_horizontal;
+						flags = pacman::console::sprite::draw_flags::flip_horizontal;
 					}
 
-					game::sprite_list::draw(console, frames[player->m_frame], { player->m_position.x - 4.0f, player->m_position.y - 4.0f}, flags);
+					game::sprite_list::gfx::draw(console, frames[player->m_frame], { player->m_position.x - 4.0f, player->m_position.y - 4.0f}, flags);
 
 					for (int32_t i = 1; i < player->m_lives; ++i)
 					{
-						game::sprite_list::draw(console, game::sprite_list::pacman_frame_01, { position_lives.x + (float)(i<<4), position_lives.y}, sprite::draw_flags::flip_horizontal);
+						game::sprite_list::gfx::draw(console, game::sprite_list::pacman_frame_01, { position_lives.x + (float)(i<<4), position_lives.y}, console::sprite::draw_flags::flip_horizontal);
 					}
 				}
 			}

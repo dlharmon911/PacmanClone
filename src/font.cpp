@@ -440,8 +440,8 @@ namespace pacman
 			{
 				float x = point.x;
 				float y = point.y;
-				float length = static_cast<float>(text.length());
-				float w = (length * static_cast<float>(glyph::size));
+				float length = (float)text.length();
+				float w = (length * (float)glyph::size);
 
 				if (alignment == alignment_t::right)
 				{
@@ -458,7 +458,7 @@ namespace pacman
 					point_t p = { x, y };
 
 					draw(font, color, p, c);
-					x += static_cast<float>(glyph::size);
+					x += (float)glyph::size;
 				}
 			}
 		}
@@ -641,7 +641,7 @@ namespace pacman
 
 				for (int32_t j = 0; j < glyph::size; ++j)
 				{
-					size_t i = static_cast<size_t>(j << 1);
+					size_t i = (size_t)(j << 1);
 
 					uint8_t h = hex::from_char(str.at(i));
 					uint8_t l = hex::from_char(str.at(i + 1));

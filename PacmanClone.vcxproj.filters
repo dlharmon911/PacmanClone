@@ -51,9 +51,6 @@
     <ClInclude Include="include\pacman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\game_color_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -93,9 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sprite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game_player.cpp">

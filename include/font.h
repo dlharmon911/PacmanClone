@@ -24,7 +24,7 @@ namespace pacman
 		typedef struct glyph_t glyph_t;
 		namespace glyph
 		{
-			static constexpr int32_t size = 8;
+			static constexpr uint32_t size = 8;
 
 			glyph_t* get(font_t* font, int32_t index);
 			bool set(glyph_t* glyph, const uint8_t* data);

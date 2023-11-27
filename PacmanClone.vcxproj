@@ -150,7 +150,6 @@
     <ClInclude Include="include\base.h" />
     <ClInclude Include="include\input.h" />
     <ClInclude Include="include\pacman.h" />
-    <ClInclude Include="include\sprite.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +164,6 @@
     <ClCompile Include="src\hex.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="logs\output.txt" />

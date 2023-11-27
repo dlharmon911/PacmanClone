@@ -2,8 +2,8 @@
 #define _PACMAN_GAME_SPRITE_LIST_H_
 
 #include "base.h"
+#include "font.h"
 #include "console.h"
-#include "sprite.h"
 #include "game_color_list.h"
 
 namespace pacman
@@ -38,7 +38,10 @@ namespace pacman
 				count
 			};
 
-			void draw(console_t* console, int32_t index, const point_t& point, int32_t flags = sprite::draw_flags::none);
+			namespace gfx
+			{
+				void draw(console_t* console, int32_t index, const point_t& point, int32_t flags = pacman::console::sprite::draw_flags::none);
+			}
 		}
 	}
 }

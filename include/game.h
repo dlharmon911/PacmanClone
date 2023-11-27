@@ -4,7 +4,6 @@
 #include "base.h"
 #include "font.h"
 #include "console.h"
-#include "sprite.h"
 #include "game_color_list.h"
 #include "game_sprite_list.h"
 #include "game_player.h"
@@ -15,12 +14,10 @@ namespace pacman
 	typedef struct game_t game_t;
 	namespace game
 	{
-
 		game_t* create();
 		void destroy(game_t* game);
 		void reset(game_t* game);
 		void update(game_t* game);
-
 
 		namespace input
 		{
@@ -39,8 +36,7 @@ namespace pacman
 
 		namespace gfx
 		{
-			void draw_grid(console_t* console, const game_t* game);
-			void draw_sprites(console_t* console, const game_t* game);
+			void draw(console_t* console, const game_t* game);
 		}
 	}
 }

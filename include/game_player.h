@@ -2,8 +2,8 @@
 #define _PACMAN_GAME_PLAYER_H_
 
 #include "base.h"
+#include "font.h"
 #include "console.h"
-#include "sprite.h"
 #include "game_defines.h"
 #include "game_sprite_list.h"
 #include "game_grid.h"

@@ -28,9 +28,10 @@ namespace pacman
 		bool m_kill = false;
 		int32_t m_counter = 0;
 
-		static constexpr dim_t DISPLAY_SIZE = { 504.0f, 648.0f };
 		static constexpr dim_t BUFFER_SIZE = { (float)(game::grid::width << 3), (float)(game::grid::height << 3) };
-		static constexpr double TIMING = 60.0;
+		static constexpr float scale = 2.25f;
+		static constexpr dim_t DISPLAY_SIZE = { BUFFER_SIZE.x * scale, BUFFER_SIZE.y * scale };
+		static constexpr double TIMING = 160.0;
 		static constexpr const char* APPNAME = "Pacman Clone";
 
 		int32_t run(const std::vector<std::string>& argList)
@@ -92,6 +93,7 @@ namespace pacman
 
 			std::cout << "Creating Display: ";
 			al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE);
+			al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_SUGGEST);
 			al_set_new_window_title(APPNAME);
 			m_display = al_create_display(DISPLAY_SIZE.x, DISPLAY_SIZE.y);
 			if (!m_display)
@@ -158,7 +160,7 @@ namespace pacman
 			std::cout << "pass" << std::endl;
 
 			std::cout << "Creating Console: ";
-			m_console = console::create(game::grid::width, game::grid::height);
+			m_console = console::create(m_font_game, game::grid::width, game::grid::height);
 			if (!m_console)
 			{
 				std::cout << "failed" << std::endl;
@@ -313,9 +315,9 @@ namespace pacman
 
 		void draw()
 		{
-			game::gfx::draw_grid(m_console, m_game);
-			console::draw(m_console, { 0.0f, 0.0f });
-			game::gfx::draw_sprites(m_console, m_game);
+			game::gfx::draw(m_console, m_game);
+
+			console::gfx::draw(m_console, { 0.0f, 0.0f });
 		}
 
 		void logic()
@@ -352,10 +354,6 @@ namespace pacman
 			{
 				game::input::keypressed(m_game, game::direction::right);
 			}
-
-
-
-
 			game::update(m_game);
 		}
 

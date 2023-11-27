@@ -6,11 +6,13 @@ namespace pacman
 	typedef struct game_t
 	{
 		game::grid_t* m_grid{ nullptr };
-		game::player_t* m_player{ nullptr };
+		game::player_t* m_player{ nullptr };	
 	} game_t;
 
 	namespace game
 	{
+		static int32_t m_highscore{ 0 };
+
 		game_t* create()
 		{
 			game_t* game = new game_t;
@@ -61,7 +63,7 @@ namespace pacman
 		{
 			static int32_t counter = 0;
 			++counter;
-			if (counter > 2)
+			if (counter > 4)
 			{
 				counter = 0;
 
@@ -81,12 +83,56 @@ namespace pacman
 		{
 			void draw_grid(console_t* console, const game_t* game)
 			{
-				grid::gfx::draw(console, game->m_grid);
+				pacman::game::grid::gfx::draw(console, game->m_grid);
 			}
 
 			void draw_sprites(console_t* console, const game_t* game)
 			{
-				player::gfx::draw(console, game->m_player);
+				pacman::game::player::gfx::draw(console, game->m_player);
+			}
+
+			void draw_score(console_t* console, const game_t* game)
+			{
+				int32_t x = 16;
+				int32_t y = 1;
+
+				color_t white = color::map_rgb(console::palette::get(console, game::color_list::white));
+
+				int32_t score = game::player::score::get(game->m_player);
+				int32_t high_score = game::m_highscore;
+
+				if (score > high_score)
+				{
+					game::m_highscore = score;
+				}
+
+				for (int32_t i = 0; i < 5; ++i)
+				{
+					int32_t v = (high_score % 10);
+					high_score = high_score / 10;
+					uint8_t c = '0' + v;
+
+					game::grid::cell::set(game->m_grid, x, y, c);
+					--x;
+				}
+
+				x = 6;
+				for (int32_t i = 0; i < 5; ++i)
+				{
+					int32_t v = (score % 10);
+					score = score / 10;
+					uint8_t c = '0' + v;
+
+					game::grid::cell::set(game->m_grid, x, y, c);
+					--x;
+				}
+			}
+
+			void draw(console_t* console, const game_t* game)
+			{
+				draw_grid(console, game);
+				draw_sprites(console, game);
+				draw_score(console, game);
 			}
 		}
 
@@ -390,7 +436,7 @@ namespace pacman
 		{
 			void set(console_t* console)
 			{
-				pacman::console::palette_t palette =
+				console::palette_t palette =
 				{
 					0x000000ff,		// black
 					0x2121deff,		// wall (blue)

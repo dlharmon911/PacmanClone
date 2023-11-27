@@ -6,7 +6,7 @@ namespace pacman
 	{
 		namespace sprite_list
 		{
-			sprite::layer_t m_sprite_layers[] =
+			console::sprite::layer_t m_sprite_layers[] =
 			{
 				{ color_list::yellow,	{0x61, 0x62, 0x63, 0x64}}, // 0x00
 				{ color_list::yellow,	{0x65, 0x66, 0x67, 0x68}}, // 0x01
@@ -47,7 +47,7 @@ namespace pacman
 				{ color_list::blue,	{0x00, 0x00, 0xbb, 0xbc}}, // 0x22
 			};
 
-			sprite_t m_sprites[] =
+			console::sprite_t m_sprites[] =
 			{
 				{ m_sprite_layers, 0x00, 0x00}, // p_f_0
 				{ m_sprite_layers, 0x01, 0x01}, // p_f_1
@@ -72,9 +72,12 @@ namespace pacman
 				{ m_sprite_layers, 0x1b, 0x1c}, // g_e_f_3
 			};
 
-			void draw(console_t* console, int32_t index, const point_t& point, int32_t flags)
+			namespace gfx
 			{
-				sprite::draw(console, &m_sprites[index], point, flags);
+				void draw(console_t* console, int32_t index, const point_t& point, int32_t flags)
+				{
+					console::sprite::gfx::draw(console, &m_sprites[index], point, flags);
+				}
 			}
 		}
 	}
