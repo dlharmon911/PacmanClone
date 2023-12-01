@@ -40,7 +40,7 @@ namespace pacman
 
 			namespace gfx
 			{
-				void draw(console_t* console, const grid_t* grid);
+				void draw(console_t* console, const grid_t* grid, bool blink);
 			}
 		}
 	}

@@ -6,11 +6,25 @@ namespace pacman
 	typedef struct game_t
 	{
 		game::grid_t* m_grid{ nullptr };
-		game::player_t* m_player{ nullptr };	
+		game::player_t* m_player{ nullptr };
+		bool m_blink{false};
 	} game_t;
 
 	namespace game
 	{
+		typedef struct tick_timer
+		{
+			const int32_t m_tick_rate;
+			int32_t m_tick_count;
+			int32_t m_tick_remainder;
+		} tick_timer;
+
+		void timer_update(tick_timer* timer, int32_t tick_count)
+		{
+			timer->m_tick_count = ((tick_count + timer->m_tick_remainder) / timer->m_tick_rate);
+			timer->m_tick_remainder = ((tick_count + timer->m_tick_remainder) % timer->m_tick_rate);
+		}
+
 		static int32_t m_highscore{ 0 };
 
 		game_t* create()
@@ -18,6 +32,8 @@ namespace pacman
 			game_t* game = new game_t;
 			if (game)
 			{
+				game->m_blink = true;
+
 				game->m_player = game::player::create();
 				if (!game->m_player)
 				{
@@ -59,15 +75,24 @@ namespace pacman
 			player::reset(game->m_player);
 		}
 
-		void update(game_t* game)
+		void update(game_t* game, int32_t tick_count)
 		{
-			static int32_t counter = 0;
-			++counter;
-			if (counter > 4)
-			{
-				counter = 0;
+			static tick_timer player_timer{ 20, 0, 0 };
+			static tick_timer blink_timer{ 200, 0, 0 };
 
+
+			game::timer_update(&blink_timer, tick_count);
+			while (blink_timer.m_tick_count > 0)
+			{
+				game->m_blink = !game->m_blink;
+				--blink_timer.m_tick_count;
+			}
+
+			game::timer_update(&player_timer, tick_count);
+			while (player_timer.m_tick_count > 0)
+			{
 				player::update(game->m_player, game->m_grid);
+				--player_timer.m_tick_count;
 			}
 		}
 
@@ -83,7 +108,7 @@ namespace pacman
 		{
 			void draw_grid(console_t* console, const game_t* game)
 			{
-				pacman::game::grid::gfx::draw(console, game->m_grid);
+				pacman::game::grid::gfx::draw(console, game->m_grid, game->m_blink);
 			}
 
 			void draw_sprites(console_t* console, const game_t* game)

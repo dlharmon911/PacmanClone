@@ -127,7 +127,7 @@ namespace pacman
 
 			namespace gfx
 			{
-				void draw(console_t* console, const grid_t* grid)
+				void draw(console_t* console, const grid_t* grid, bool blink)
 				{
 					pacman::console::palette::background::set(console, 0);
 					pacman::console::palette::foreground::set(console, 15);
@@ -146,7 +146,10 @@ namespace pacman
 							case cell::type::text:		color = color_list::white; break;
 							case cell::type::wall:		color = color_list::blue; break;
 							case cell::type::dot:		color = color_list::dot; break;
-							case cell::type::big_dot:	color = color_list::dot; break;
+							case cell::type::big_dot:	
+							{
+								color = (blink ? color_list::dot : color_list::black);
+							} break;
 							case cell::type::door:		color = color_list::pink; break;
 							}
 

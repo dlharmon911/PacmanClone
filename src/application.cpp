@@ -26,12 +26,18 @@ namespace pacman
 		console_t* m_console = nullptr;
 		game_t* m_game = nullptr;
 		bool m_kill = false;
-		int32_t m_counter = 0;
+
+		namespace time
+		{
+			double m_elapsed = 0.0;
+			double m_last_updated = 0.0;
+			static constexpr double m_tick_rate = 0.001;
+		}
 
 		static constexpr dim_t BUFFER_SIZE = { (float)(game::grid::width << 3), (float)(game::grid::height << 3) };
 		static constexpr float scale = 2.25f;
 		static constexpr dim_t DISPLAY_SIZE = { BUFFER_SIZE.x * scale, BUFFER_SIZE.y * scale };
-		static constexpr double TIMING = 160.0;
+		static constexpr double TIMING = 60.0;
 		static constexpr const char* APPNAME = "Pacman Clone";
 
 		int32_t run(const std::vector<std::string>& argList)
@@ -186,9 +192,12 @@ namespace pacman
 			al_register_event_source(m_event_queue, al_get_keyboard_event_source());
 			al_register_event_source(m_event_queue, al_get_mouse_event_source());
 
-			srand(time(nullptr));
+			srand(::time(nullptr));
 
 			al_start_timer(m_timer);
+
+			time::m_elapsed = 0.0;
+			time::m_last_updated = al_get_time();
 
 			std::cout << "Initialization Complete" << std::endl << std::endl;
 
@@ -279,12 +288,7 @@ namespace pacman
 					a = x;
 				}
 
-				while (m_counter > 0)
-				{
-					logic();
-					input::acknowledge_button_presses();
-					--m_counter;
-				}
+				logic();
 
 				al_clear_to_color(color::map_rgb(0x202050));
 
@@ -322,6 +326,8 @@ namespace pacman
 
 		void logic()
 		{
+			static int32_t tick_count = 0;
+
 			if (input::keyboard::m_button[ALLEGRO_KEY_ESCAPE].m_was_pressed)
 			{
 				m_kill = true;
@@ -354,7 +360,20 @@ namespace pacman
 			{
 				game::input::keypressed(m_game, game::direction::right);
 			}
-			game::update(m_game);
+
+			time::m_elapsed = time::m_elapsed + (al_get_time() - time::m_last_updated);
+			
+			tick_count = 0;
+			while (time::m_elapsed > time::m_tick_rate)
+			{
+				++tick_count;
+				time::m_elapsed -= time::m_tick_rate;
+			}
+			time::m_last_updated = al_get_time();
+
+			game::update(m_game, tick_count);
+
+			input::acknowledge_button_presses();
 		}
 
 		void input()
@@ -369,7 +388,7 @@ namespace pacman
 				{
 				case ALLEGRO_EVENT_TIMER:
 				{
-					++m_counter;
+					logic();
 				} break;
 
 				case ALLEGRO_EVENT_DISPLAY_RESIZE:

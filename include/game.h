@@ -17,7 +17,7 @@ namespace pacman
 		game_t* create();
 		void destroy(game_t* game);
 		void reset(game_t* game);
-		void update(game_t* game);
+		void update(game_t* game, int32_t tick_count);
 
 		namespace input
 		{
