@@ -1,4 +1,9 @@
 #include "pacman.h"
+#include "application.h"
+
+#ifdef _MSC_VER
+#include <allegro5/allegro_windows.h>
+#endif
 
 namespace pacman
 {
@@ -6,8 +11,8 @@ namespace pacman
 	{
 		namespace padding
 		{
-			static constexpr float width = 4.0f;
-			static constexpr float height = 4.0f;
+			static constexpr float WIDTH = 2.0f;
+			static constexpr float HEIGHT = 2.0f;
 		}
 
 		int32_t init(const std::vector<std::string>& argList);
@@ -31,14 +36,14 @@ namespace pacman
 		{
 			double m_elapsed = 0.0;
 			double m_last_updated = 0.0;
-			static constexpr double m_tick_rate = 0.001;
+			static constexpr double TICK_RATE = 0.001;
 		}
 
-		static constexpr dim_t BUFFER_SIZE = { (float)(game::grid::width << 3), (float)(game::grid::height << 3) };
-		static constexpr float scale = 2.25f;
-		static constexpr dim_t DISPLAY_SIZE = { BUFFER_SIZE.x * scale, BUFFER_SIZE.y * scale };
-		static constexpr double TIMING = 60.0;
-		static constexpr const char* APPNAME = "Pacman Clone";
+		static constexpr float DISPLAY_SCALE = 2.25f;
+		static constexpr dim_t BUFFER_SIZE = { (float)(game::grid::WIDTH << pacman::font::glyph::SHIFT), (float)(game::grid::HEIGHT << pacman::font::glyph::SHIFT) };
+		static constexpr dim_t DISPLAY_SIZE = { BUFFER_SIZE.x * DISPLAY_SCALE, BUFFER_SIZE.y * DISPLAY_SCALE };
+		static constexpr double LOGIC_TIMING = 60.0;
+		static constexpr uint32_t BACKGROUND_DEFAULT = 0x101030;
 
 		int32_t run(const std::vector<std::string>& argList)
 		{
@@ -100,7 +105,7 @@ namespace pacman
 			std::cout << "Creating Display: ";
 			al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE);
 			al_set_new_display_option(ALLEGRO_VSYNC, 2, ALLEGRO_SUGGEST);
-			al_set_new_window_title(APPNAME);
+			al_set_new_window_title(display::TITLE);
 			m_display = al_create_display(DISPLAY_SIZE.x, DISPLAY_SIZE.y);
 			if (!m_display)
 			{
@@ -108,15 +113,25 @@ namespace pacman
 				return -1;
 			}
 			std::cout << "pass" << std::endl;
-			al_clear_to_color(color::map_rgb(0x0));
+			al_clear_to_color(color::map_rgb(BACKGROUND_DEFAULT));
 
+#ifdef _MSC_VER
+			HICON icon = LoadIcon(GetModuleHandle(NULL), L"IDI_ICON1");
+			if (icon) 
+			{
+				HWND winhandle = al_get_win_window_handle(m_display);
+				SetClassLongPtr(winhandle, GCLP_HICON, (LONG_PTR)icon);
+				SetClassLongPtr(winhandle, GCLP_HICONSM, (LONG_PTR)icon);
+			}
+#else
 			bitmap_t* icon = al_load_bitmap("icon.png");
 			if (icon)
 			{
-				al_convert_mask_to_alpha(icon, color::map_rgb(0xff00ff));
+				al_convert_mask_to_alpha(icon, color::map_rgb(color::MAGIC_PINK_RGB));
 				al_set_display_icon(m_display, icon);
 				al_destroy_bitmap(icon);
 			}
+#endif
 
 			std::cout << "Creating Bitmap Buffer: ";
 			m_buffer = al_create_bitmap(BUFFER_SIZE.x, BUFFER_SIZE.y);
@@ -157,7 +172,7 @@ namespace pacman
 			std::cout << "pass" << std::endl;
 
 			std::cout << "Creating Logic Timer: ";
-			m_timer = al_create_timer(1.0 / TIMING);
+			m_timer = al_create_timer(1.0 / LOGIC_TIMING);
 			if (!m_timer)
 			{
 				std::cout << "failed" << std::endl;
@@ -166,7 +181,7 @@ namespace pacman
 			std::cout << "pass" << std::endl;
 
 			std::cout << "Creating Console: ";
-			m_console = console::create(m_font_game, game::grid::width, game::grid::height);
+			m_console = console::create(m_font_game, game::grid::WIDTH, game::grid::HEIGHT);
 			if (!m_console)
 			{
 				std::cout << "failed" << std::endl;
@@ -279,8 +294,8 @@ namespace pacman
 				buffer_size = dim_t(al_get_bitmap_width(m_buffer), al_get_bitmap_height(m_buffer));
 				display_size = dim_t(al_get_display_width(m_display), al_get_display_height(m_display));
 
-				float y = display_size.y / (buffer_size.y + (2.0f * padding::width));
-				float x = display_size.x / (buffer_size.x + (2.0f * padding::height));
+				float y = display_size.y / (buffer_size.y + (2.0f * padding::WIDTH));
+				float x = display_size.x / (buffer_size.x + (2.0f * padding::HEIGHT));
 				float a = y;
 
 				if (y > x)
@@ -290,7 +305,7 @@ namespace pacman
 
 				logic();
 
-				al_clear_to_color(color::map_rgb(0x202050));
+				al_clear_to_color(color::map_rgb(BACKGROUND_DEFAULT));
 
 				target = al_get_target_bitmap();
 				al_set_target_bitmap(m_buffer);
@@ -337,37 +352,37 @@ namespace pacman
 				input::keyboard::m_button[ALLEGRO_KEY_W].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_PAD_8].m_was_pressed)
 			{
-				game::input::keypressed(m_game, game::direction::up);
+				game::input::keypressed(m_game, game::direction::UP);
 			}
 
 			if (input::keyboard::m_button[ALLEGRO_KEY_DOWN].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_S].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_PAD_2].m_was_pressed)
 			{
-				game::input::keypressed(m_game, game::direction::down);
+				game::input::keypressed(m_game, game::direction::DOWN);
 			}
 
 			if (input::keyboard::m_button[ALLEGRO_KEY_LEFT].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_A].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_PAD_4].m_was_pressed)
 			{
-				game::input::keypressed(m_game, game::direction::left);
+				game::input::keypressed(m_game, game::direction::LEFT);
 			}
 
 			if (input::keyboard::m_button[ALLEGRO_KEY_RIGHT].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_D].m_was_pressed ||
 				input::keyboard::m_button[ALLEGRO_KEY_PAD_6].m_was_pressed)
 			{
-				game::input::keypressed(m_game, game::direction::right);
+				game::input::keypressed(m_game, game::direction::RIGHT);
 			}
 
 			time::m_elapsed = time::m_elapsed + (al_get_time() - time::m_last_updated);
 			
 			tick_count = 0;
-			while (time::m_elapsed > time::m_tick_rate)
+			while (time::m_elapsed > time::TICK_RATE)
 			{
 				++tick_count;
-				time::m_elapsed -= time::m_tick_rate;
+				time::m_elapsed -= time::TICK_RATE;
 			}
 			time::m_last_updated = al_get_time();
 

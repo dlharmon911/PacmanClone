@@ -1,15 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
-
-namespace pacman
-{
-	namespace application
-	{
-		int32_t run(const std::vector<std::string>& argList);
-	}
-}
+#include "application.h"
 
 int main(int argc, char** argv)
 {

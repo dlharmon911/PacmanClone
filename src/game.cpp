@@ -121,7 +121,7 @@ namespace pacman
 				int32_t x = 16;
 				int32_t y = 1;
 
-				color_t white = color::map_rgb(console::palette::get(console, game::color_list::white));
+				color_t white = color::map_rgb(console::palette::get(console, game::color_list::WHITE));
 
 				int32_t score = game::player::score::get(game->m_player);
 				int32_t high_score = game::m_highscore;
@@ -165,46 +165,46 @@ namespace pacman
 		{
 			font_t* create()
 			{
-				static const uint8_t default_font_data[256][pacman::font::glyph::size] =
+				static const uint8_t default_font_data[256][pacman::font::glyph::SIZE] =
 				{
 
-#define				d_zero_char { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+#define				D_ZERO_CHAR { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 
-					d_zero_char, // 0x00
-					d_zero_char, // 0x01
-					d_zero_char, // 0x02
-					d_zero_char, // 0x03
-					d_zero_char, // 0x04
-					d_zero_char, // 0x05
-					d_zero_char, // 0x06
-					d_zero_char, // 0x07
-					d_zero_char, // 0x08
-					d_zero_char, // 0x09
-					d_zero_char, // 0x0a
-					d_zero_char, // 0x0b
-					d_zero_char, // 0x0c
-					d_zero_char, // 0x0d
-					d_zero_char, // 0x0e
-					d_zero_char, // 0x0f
+					D_ZERO_CHAR, // 0x00
+					D_ZERO_CHAR, // 0x01
+					D_ZERO_CHAR, // 0x02
+					D_ZERO_CHAR, // 0x03
+					D_ZERO_CHAR, // 0x04
+					D_ZERO_CHAR, // 0x05
+					D_ZERO_CHAR, // 0x06
+					D_ZERO_CHAR, // 0x07
+					D_ZERO_CHAR, // 0x08
+					D_ZERO_CHAR, // 0x09
+					D_ZERO_CHAR, // 0x0a
+					D_ZERO_CHAR, // 0x0b
+					D_ZERO_CHAR, // 0x0c
+					D_ZERO_CHAR, // 0x0d
+					D_ZERO_CHAR, // 0x0e
+					D_ZERO_CHAR, // 0x0f
 
-					d_zero_char, // 0x10
-					d_zero_char, // 0x11
-					d_zero_char, // 0x12
-					d_zero_char, // 0x13
-					d_zero_char, // 0x14
-					d_zero_char, // 0x15
-					d_zero_char, // 0x16
-					d_zero_char, // 0x17
-					d_zero_char, // 0x18
-					d_zero_char, // 0x19
-					d_zero_char, // 0x1a
-					d_zero_char, // 0x1b
-					d_zero_char, // 0x1c
-					d_zero_char, // 0x1d
-					d_zero_char, // 0x1e
-					d_zero_char, // 0x1f
+					D_ZERO_CHAR, // 0x10
+					D_ZERO_CHAR, // 0x11
+					D_ZERO_CHAR, // 0x12
+					D_ZERO_CHAR, // 0x13
+					D_ZERO_CHAR, // 0x14
+					D_ZERO_CHAR, // 0x15
+					D_ZERO_CHAR, // 0x16
+					D_ZERO_CHAR, // 0x17
+					D_ZERO_CHAR, // 0x18
+					D_ZERO_CHAR, // 0x19
+					D_ZERO_CHAR, // 0x1a
+					D_ZERO_CHAR, // 0x1b
+					D_ZERO_CHAR, // 0x1c
+					D_ZERO_CHAR, // 0x1d
+					D_ZERO_CHAR, // 0x1e
+					D_ZERO_CHAR, // 0x1f
 
-					d_zero_char, // 0x20
+					D_ZERO_CHAR, // 0x20
 					{ 0x18, 0x3c, 0x3c, 0x3c, 0x18, 0x18, 0x00, 0x18 }, // 0x21
 					{ 0x6c, 0x6c, 0x6c, 0x00, 0x00, 0x00, 0x00, 0x00 }, // 0x22
 					{ 0x6c, 0x6c, 0xfe, 0x6c, 0xfe, 0x6c, 0x6c, 0x00 }, // 0x23
@@ -294,17 +294,17 @@ namespace pacman
 					{ 0x00, 0xe0, 0xf8, 0xfc, 0xfc, 0x7e, 0x3e, 0x1e }, // 0x72
 					{ 0x70, 0x60, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, // 0x73
 					{ 0x0e, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, // 0x74
-					d_zero_char, // 0x75
-					d_zero_char, // 0x76
-					d_zero_char, // 0x77
-					d_zero_char, // 0x78
-					d_zero_char, // 0x79
-					d_zero_char, // 0x7a
-					d_zero_char, // 0x7b
-					d_zero_char, // 0x7c
-					d_zero_char, // 0x7d
-					d_zero_char, // 0x7e
-					d_zero_char, // 0x7f
+					D_ZERO_CHAR, // 0x75
+					D_ZERO_CHAR, // 0x76
+					D_ZERO_CHAR, // 0x77
+					D_ZERO_CHAR, // 0x78
+					D_ZERO_CHAR, // 0x79
+					D_ZERO_CHAR, // 0x7a
+					D_ZERO_CHAR, // 0x7b
+					D_ZERO_CHAR, // 0x7c
+					D_ZERO_CHAR, // 0x7d
+					D_ZERO_CHAR, // 0x7e
+					D_ZERO_CHAR, // 0x7f
 
 					{ 0x0f, 0x30, 0x40, 0x47, 0x88, 0x90, 0x90, 0x90 }, // 0x80
 					{ 0xff, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00 }, // 0x81
@@ -385,71 +385,71 @@ namespace pacman
 					{ 0x00, 0x19, 0x26, 0x00, 0x00, 0x00, 0x00, 0x00 }, // 0xbf
 					{ 0x00, 0x98, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00 }, // 0xc0
 
-					d_zero_char, // 0xc1
-					d_zero_char, // 0xc2
-					d_zero_char, // 0xc3
-					d_zero_char, // 0xc4
-					d_zero_char, // 0xc5
-					d_zero_char, // 0xc6
-					d_zero_char, // 0xc7
-					d_zero_char, // 0xc8
-					d_zero_char, // 0xc9
-					d_zero_char, // 0xca
-					d_zero_char, // 0xcb
-					d_zero_char, // 0xcc
-					d_zero_char, // 0xcd
-					d_zero_char, // 0xce
-					d_zero_char, // 0xcf
+					D_ZERO_CHAR, // 0xc1
+					D_ZERO_CHAR, // 0xc2
+					D_ZERO_CHAR, // 0xc3
+					D_ZERO_CHAR, // 0xc4
+					D_ZERO_CHAR, // 0xc5
+					D_ZERO_CHAR, // 0xc6
+					D_ZERO_CHAR, // 0xc7
+					D_ZERO_CHAR, // 0xc8
+					D_ZERO_CHAR, // 0xc9
+					D_ZERO_CHAR, // 0xca
+					D_ZERO_CHAR, // 0xcb
+					D_ZERO_CHAR, // 0xcc
+					D_ZERO_CHAR, // 0xcd
+					D_ZERO_CHAR, // 0xce
+					D_ZERO_CHAR, // 0xcf
 
-					d_zero_char, // 0xd0
-					d_zero_char, // 0xd1
-					d_zero_char, // 0xd2
-					d_zero_char, // 0xd3
-					d_zero_char, // 0xd4
-					d_zero_char, // 0xd5
-					d_zero_char, // 0xd6
-					d_zero_char, // 0xd7
-					d_zero_char, // 0xd8
-					d_zero_char, // 0xd9
-					d_zero_char, // 0xda
-					d_zero_char, // 0xdb
-					d_zero_char, // 0xdc
-					d_zero_char, // 0xdd
-					d_zero_char, // 0xde
-					d_zero_char, // 0xdf
+					D_ZERO_CHAR, // 0xd0
+					D_ZERO_CHAR, // 0xd1
+					D_ZERO_CHAR, // 0xd2
+					D_ZERO_CHAR, // 0xd3
+					D_ZERO_CHAR, // 0xd4
+					D_ZERO_CHAR, // 0xd5
+					D_ZERO_CHAR, // 0xd6
+					D_ZERO_CHAR, // 0xd7
+					D_ZERO_CHAR, // 0xd8
+					D_ZERO_CHAR, // 0xd9
+					D_ZERO_CHAR, // 0xda
+					D_ZERO_CHAR, // 0xdb
+					D_ZERO_CHAR, // 0xdc
+					D_ZERO_CHAR, // 0xdd
+					D_ZERO_CHAR, // 0xde
+					D_ZERO_CHAR, // 0xdf
 
-					d_zero_char, // 0xe0
-					d_zero_char, // 0xe1
-					d_zero_char, // 0xe2
-					d_zero_char, // 0xe3
-					d_zero_char, // 0xe4
-					d_zero_char, // 0xe5
-					d_zero_char, // 0xe6
-					d_zero_char, // 0xe7
-					d_zero_char, // 0xe8
-					d_zero_char, // 0xe9
-					d_zero_char, // 0xea
-					d_zero_char, // 0xeb
-					d_zero_char, // 0xec
-					d_zero_char, // 0xed
-					d_zero_char, // 0xee
-					d_zero_char, // 0xef
+					D_ZERO_CHAR, // 0xe0
+					D_ZERO_CHAR, // 0xe1
+					D_ZERO_CHAR, // 0xe2
+					D_ZERO_CHAR, // 0xe3
+					D_ZERO_CHAR, // 0xe4
+					D_ZERO_CHAR, // 0xe5
+					D_ZERO_CHAR, // 0xe6
+					D_ZERO_CHAR, // 0xe7
+					D_ZERO_CHAR, // 0xe8
+					D_ZERO_CHAR, // 0xe9
+					D_ZERO_CHAR, // 0xea
+					D_ZERO_CHAR, // 0xeb
+					D_ZERO_CHAR, // 0xec
+					D_ZERO_CHAR, // 0xed
+					D_ZERO_CHAR, // 0xee
+					D_ZERO_CHAR, // 0xef
 
-					d_zero_char, // 0xf0
-					d_zero_char, // 0xf1
-					d_zero_char, // 0xf2
-					d_zero_char, // 0xf3
-					d_zero_char, // 0xf4
-					d_zero_char, // 0xf5
-					d_zero_char, // 0xf6
-					d_zero_char, // 0xf7
-					d_zero_char, // 0xf8
-					d_zero_char, // 0xf9
-					d_zero_char, // 0xfa
-					d_zero_char, // 0xfb
-					d_zero_char, // 0xfc
-					d_zero_char, // 0xfd
-					d_zero_char, // 0xfe
+					D_ZERO_CHAR, // 0xf0
+					D_ZERO_CHAR, // 0xf1
+					D_ZERO_CHAR, // 0xf2
+					D_ZERO_CHAR, // 0xf3
+					D_ZERO_CHAR, // 0xf4
+					D_ZERO_CHAR, // 0xf5
+					D_ZERO_CHAR, // 0xf6
+					D_ZERO_CHAR, // 0xf7
+					D_ZERO_CHAR, // 0xf8
+					D_ZERO_CHAR, // 0xf9
+					D_ZERO_CHAR, // 0xfa
+					D_ZERO_CHAR, // 0xfb
+					D_ZERO_CHAR, // 0xfc
+					D_ZERO_CHAR, // 0xfd
+					D_ZERO_CHAR, // 0xfe
 					{ 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } // 0xff
 				};
 

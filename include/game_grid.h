@@ -11,8 +11,8 @@ namespace pacman
 		typedef struct grid_t grid_t;
 		namespace grid
 		{
-			static constexpr int32_t width = 28;
-			static constexpr int32_t height = 36;
+			static constexpr int32_t WIDTH = 28;
+			static constexpr int32_t HEIGHT = 36;
 
 			grid_t* create();
 			void destroy(grid_t* grid);
@@ -24,13 +24,13 @@ namespace pacman
 				{
 					enum
 					{
-						empty,
-						text,
-						wall,
-						door,
-						dot,
-						big_dot,
-						count
+						EMPTY,
+						TEXT,
+						WALL,
+						DOOR,
+						DOT,
+						POWERUP,
+						COUNT
 					};
 					int32_t get(uint8_t value);
 				}

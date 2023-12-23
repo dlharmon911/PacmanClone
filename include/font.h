@@ -21,10 +21,16 @@ namespace pacman
 		bool save_to_json_file(font_t* font, const std::string& filename);
 #endif // INCLUDE_JSON_FONT_FUNCTIONS
 
+		namespace bitmap
+		{
+			bitmap_t* get(font_t* font);
+		}
+
 		typedef struct glyph_t glyph_t;
 		namespace glyph
 		{
-			static constexpr uint32_t size = 8;
+			static constexpr uint32_t SIZE = 8;
+			static constexpr int32_t SHIFT = 3;
 
 			glyph_t* get(font_t* font, int32_t index);
 			bool set(glyph_t* glyph, const uint8_t* data);
@@ -34,9 +40,9 @@ namespace pacman
 
 		enum class alignment_t
 		{
-			left,
-			right,
-			centre
+			LEFT,
+			RIGHT,
+			CENTRE
 		};
 
 		void draw(const font_t* font, color_t color, const point_t& point, uint8_t c);

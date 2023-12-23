@@ -11,23 +11,23 @@ namespace pacman
 		{
 			enum
 			{
-				black,			// 0x000000
-				blue,			// 0x2121de
-				yellow,			// 0xffff00
-				red,			// 0xff0000
-				pink,			// 0xffb8de
-				cyan,			// 0x00ffde
-				orange,			// 0xffbb47
-				dot,			// 0xffbb97
-				brown,			// 0xde9747
-				white,			// 0xdedede
-				eyes,			// 0xe0ddff
-				undef_11,
-				undef_12,
-				undef_13,
-				undef_14,
-				undef_15,
-				count
+				BLACK,			// 0X000000
+				BLUE,			// 0X2121DE
+				YELLOW,			// 0XFFFF00
+				RED,			// 0XFF0000
+				PINK,			// 0XFFB8DE
+				CYAN,			// 0X00FFDE
+				ORANGE,			// 0XFFBB47
+				DOT,			// 0XFFBB97
+				BROWN,			// 0XDE9747
+				WHITE,			// 0XDEDEDE
+				EYES,			// 0XE0DDFF
+				UNDEF_11,
+				UNDEF_12,
+				UNDEF_13,
+				UNDEF_14,
+				UNDEF_15,
+				COUNT
 			};
 		}
 	}

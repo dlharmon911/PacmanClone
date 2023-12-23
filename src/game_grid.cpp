@@ -7,7 +7,7 @@ namespace pacman
 	{
 		typedef struct grid_t
 		{
-			uint8_t m_data[grid::width * grid::height]{};
+			uint8_t m_data[grid::WIDTH * grid::HEIGHT]{};
 		} grid_t;
 
 		namespace grid
@@ -32,7 +32,7 @@ namespace pacman
 
 			void reset(grid_t* grid)
 			{
-				const uint8_t data[grid::width * grid::height] =
+				const uint8_t data[grid::WIDTH * grid::HEIGHT] =
 				{
 					0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x48, 0x49, 0x47, 0x48, 0x20, 0x53, 0x43, 0x4f, 0x52, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
 					0x20, 0x20, 0x30, 0x30, 0x30, 0x30, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20, 0x30, 0x30, 0x30, 0x30, 0x30, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
@@ -72,11 +72,11 @@ namespace pacman
 					0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 				};
 
-				for (int8_t j = 0; j < grid::height; ++j)
+				for (int8_t j = 0; j < grid::HEIGHT; ++j)
 				{
-					for (int8_t i = 0; i < grid::width; ++i)
+					for (int8_t i = 0; i < grid::WIDTH; ++i)
 					{
-						grid->m_data[i + j * grid::width] = data[i + j * grid::width];
+						grid->m_data[i + j * grid::WIDTH] = data[i + j * grid::WIDTH];
 					}
 				}
 			}
@@ -87,28 +87,28 @@ namespace pacman
 				{
 					int32_t get(uint8_t value)
 					{
-						int32_t type = cell::type::empty;
+						int32_t type = cell::type::EMPTY;
 
 						if (value >= 0x20 && value < 0x80)
 						{
-							type = cell::type::text;
+							type = cell::type::TEXT;
 						}
 
 						if (value >= 0x80 && value <= 0x9f)
 						{
-							type = cell::type::wall;
+							type = cell::type::WALL;
 						}
 						if (value == 0xa1)
 						{
-							type = cell::type::door;
+							type = cell::type::DOOR;
 						}
-						if (value == 0xa2) // big dot
+						if (value == 0xa2)
 						{
-							type = cell::type::big_dot;
+							type = cell::type::POWERUP;
 						}
-						if (value == 0xa0) // dot
+						if (value == 0xa0)
 						{
-							type = cell::type::dot;
+							type = cell::type::DOT;
 						}
 
 						return type;
@@ -116,12 +116,12 @@ namespace pacman
 				}
 				void set(grid_t* grid, int32_t x, int32_t y, uint8_t value)
 				{
-					grid->m_data[x + y * width] = value;
+					grid->m_data[x + y * grid::WIDTH] = value;
 				}
 
 				uint8_t get(const grid_t* grid, int32_t x, int32_t y)
 				{
-					return grid->m_data[x + y * width];
+					return grid->m_data[x + y * grid::WIDTH];
 				}
 			}
 
@@ -132,25 +132,25 @@ namespace pacman
 					pacman::console::palette::background::set(console, 0);
 					pacman::console::palette::foreground::set(console, 15);
 					pacman::console::clear(console);
-					for (int8_t j = 0; j < grid::height; ++j)
+					for (int8_t j = 0; j < grid::HEIGHT; ++j)
 					{
-						for (int8_t i = 0; i < grid::width; ++i)
+						for (int8_t i = 0; i < grid::WIDTH; ++i)
 						{
 							int32_t color = 0;
-							uint8_t value = grid->m_data[i + j * grid::width];
+							uint8_t value = grid->m_data[i + j * grid::WIDTH];
 							int32_t type = cell::type::get(value);
 
 							switch (type)
 							{
-							case cell::type::empty:		color = color_list::black; break;
-							case cell::type::text:		color = color_list::white; break;
-							case cell::type::wall:		color = color_list::blue; break;
-							case cell::type::dot:		color = color_list::dot; break;
-							case cell::type::big_dot:	
+							case cell::type::EMPTY:		color = color_list::BLACK; break;
+							case cell::type::TEXT:		color = color_list::WHITE; break;
+							case cell::type::WALL:		color = color_list::BLUE; break;
+							case cell::type::DOT:		color = color_list::DOT; break;
+							case cell::type::POWERUP:
 							{
-								color = (blink ? color_list::dot : color_list::black);
+								color = (blink ? color_list::DOT : color_list::BLACK);
 							} break;
-							case cell::type::door:		color = color_list::pink; break;
+							case cell::type::DOOR:		color = color_list::PINK; break;
 							}
 
 							pacman::console::palette::background::set(console, 0);

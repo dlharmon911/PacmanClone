@@ -66,6 +66,9 @@
     <ClInclude Include="include\game_defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\color.cpp">
@@ -103,11 +106,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="logs\output.txt">
-      <Filter>Log Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="icon.ico">
       <Filter>Resource Files</Filter>
     </Image>
@@ -116,5 +114,10 @@
     <ResourceCompile Include="PacmanClone.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="logs\output.txt">
+      <Filter>Log Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

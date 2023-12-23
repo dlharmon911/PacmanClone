@@ -73,6 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\</OutDir>
     <Allegro_AddonImage>true</Allegro_AddonImage>
+    <Allegro_AddonAudio>true</Allegro_AddonAudio>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -137,6 +138,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\application.h" />
     <ClInclude Include="include\color.h" />
     <ClInclude Include="include\console.h" />
     <ClInclude Include="include\font.h" />
@@ -166,13 +168,13 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="logs\output.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PacmanClone.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="logs\output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

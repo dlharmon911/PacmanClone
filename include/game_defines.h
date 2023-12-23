@@ -11,11 +11,12 @@ namespace pacman
 		{
 			enum
 			{
-				up,
-				down,
-				left,
-				right,
-				count
+				UNDEFINED = -1,
+				UP,
+				DOWN,
+				LEFT,
+				RIGHT,
+				COUNT
 			};
 		}
 

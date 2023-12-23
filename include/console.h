@@ -41,10 +41,10 @@ namespace pacman
 
 		namespace palette
 		{
-			static constexpr int32_t size = 16;
+			static constexpr int32_t SIZE = 16;
 		}
 		using rgba_t = uint32_t;
-		using palette_t = rgba_t[palette::size];
+		using palette_t = rgba_t[palette::SIZE];
 		namespace palette
 		{
 			void set(console_t* console, int8_t index, uint32_t rgba);
@@ -75,10 +75,12 @@ namespace pacman
 
 		namespace sprite
 		{
+			static constexpr int32_t CHARACTER_COUNT = 4;
+
 			typedef struct layer_t
 			{
 				int8_t color_index;
-				uint8_t character[4];
+				uint8_t character[CHARACTER_COUNT];
 			} layer_t;
 		}
 
@@ -93,15 +95,15 @@ namespace pacman
 		{
 			namespace draw_flags
 			{
-				static constexpr int32_t none = 0;
-				static constexpr int32_t flip_horizontal = 1;
-				static constexpr int32_t flip_vertical = 2;
+				static constexpr int32_t NONE = 0;
+				static constexpr int32_t FLIP_HORIZONTAL = 1;
+				static constexpr int32_t FLIP_VERTICAL = 2;
 			};
 
 			namespace gfx
 			{
-				void draw(console_t* console, const sprite_t* sprite, const point_t& point, int32_t flags = draw_flags::none);
-				void draw(console_t* console, const layer_t* layers, int32_t begin, int32_t end, const point_t& point, int32_t flags = draw_flags::none);
+				void draw(console_t* console, const sprite_t* sprite, const point_t& point, int32_t flags = draw_flags::NONE);
+				void draw(console_t* console, const layer_t* layers, int32_t begin, int32_t end, const point_t& point, int32_t flags = draw_flags::NONE);
 			}
 		}
 	}

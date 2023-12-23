@@ -15,15 +15,16 @@ namespace pacman
 
 		namespace mouse
 		{
+			static constexpr int32_t BUTTON_COUNT = 8;
+
 			extern point_t m_pos;
 			extern point_t m_wheel;
-			static constexpr int32_t button_count = 8;
-			extern button_t m_button[button_count];
+			extern button_t m_button[BUTTON_COUNT];
 		}
 		namespace keyboard
 		{
-			static constexpr int32_t button_count = ALLEGRO_KEY_MAX;
-			extern button_t m_button[button_count];
+			static constexpr int32_t BUTTON_COUNT = ALLEGRO_KEY_MAX;
+			extern button_t m_button[BUTTON_COUNT];
 		}
 		void acknowledge_button_presses();
 	}

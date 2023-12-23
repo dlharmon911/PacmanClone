@@ -6,8 +6,8 @@ namespace pacman
 	{
 		namespace cell
 		{
-			static constexpr float width = 8.0f;
-			static constexpr float height = 8.0f;
+			static constexpr float WIDTH = (float)pacman::font::glyph::SIZE;
+			static constexpr float HEIGHT = (float)pacman::font::glyph::SIZE;
 		}
 	}
 
@@ -61,7 +61,7 @@ namespace pacman
 				console->m_data = nullptr;
 				console->m_font = font;
 
-				if (!(console->m_bitmap = al_create_bitmap(width << 3, height << 3)) ||
+				if (!(console->m_bitmap = al_create_bitmap(width << pacman::font::glyph::SHIFT, height << pacman::font::glyph::SHIFT)) ||
 					!(console->m_data = new uint8_t[width * height]) ||
 					!(console->m_font))
 				{
@@ -80,7 +80,7 @@ namespace pacman
 					}
 				}
 
-				for (int32_t i = 0; i < console::palette::size; ++i)
+				for (int32_t i = 0; i < console::palette::SIZE; ++i)
 				{
 					console->m_palette[i] = default_palette[i];
 				}
@@ -192,7 +192,7 @@ namespace pacman
 		{
 			void set(console_t* console, int8_t index, uint32_t rgba)
 			{
-				if (index >= 0 && index < console::palette::size)
+				if (index >= 0 && index < console::palette::SIZE)
 				{
 					console->m_palette[index] = rgba;
 				}
@@ -200,7 +200,7 @@ namespace pacman
 
 			void set(console_t* console, const palette_t& palette)
 			{
-				for (int32_t index = 0; index < console::palette::size; ++index)
+				for (int32_t index = 0; index < console::palette::SIZE; ++index)
 				{
 					console->m_palette[index] = palette[index];
 				}
@@ -208,7 +208,7 @@ namespace pacman
 
 			uint32_t get(const console_t* console, int8_t index)
 			{
-				if (index >= 0 && index < console::palette::size)
+				if (index >= 0 && index < console::palette::SIZE)
 				{
 					return console->m_palette[index];
 				}
@@ -229,7 +229,7 @@ namespace pacman
 			{
 				void set(console_t* console, int8_t index)
 				{
-					if (index >= 0 && index < console::palette::size)
+					if (index >= 0 && index < console::palette::SIZE)
 					{
 						console->m_background = index;
 					}
@@ -245,7 +245,7 @@ namespace pacman
 			{
 				void set(console_t* console, int8_t index)
 				{
-					if (index >= 0 && index < console::palette::size)
+					if (index >= 0 && index < console::palette::SIZE)
 					{
 						console->m_foreground = index;
 					}
@@ -269,7 +269,7 @@ namespace pacman
 					static color_t background = { 0.0f, 0.0f, 0.0f, 0.0f };
 					static color_t foreground = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-					point = { float(console->m_cursor.x * pacman::font::glyph::size), float(console->m_cursor.y * pacman::font::glyph::size) };
+					point = { float(console->m_cursor.x * pacman::font::glyph::SIZE), float(console->m_cursor.y * pacman::font::glyph::SIZE) };
 					background = pacman::color::map_rgba(console->m_palette[console->m_background]);
 					foreground = pacman::color::map_rgba(console->m_palette[console->m_foreground]);
 
@@ -321,16 +321,16 @@ namespace pacman
 					al_identity_transform(&t);
 					al_translate_transform(&t, -point.x, -point.y);
 
-					if (flags & draw_flags::flip_horizontal)
+					if (flags & draw_flags::FLIP_HORIZONTAL)
 					{
 						al_scale_transform(&t, -1.0f, 1.0f);
-						al_translate_transform(&t, (float)pacman::font::glyph::size * 2.0f, 0.0f);
+						al_translate_transform(&t, (float)pacman::font::glyph::SIZE * 2.0f, 0.0f);
 					}
 
-					if (flags & draw_flags::flip_vertical)
+					if (flags & draw_flags::FLIP_VERTICAL)
 					{
 						al_scale_transform(&t, 1.0f, -1.0f);
-						al_translate_transform(&t, 0.0f, (float)pacman::font::glyph::size * 2.0f);
+						al_translate_transform(&t, 0.0f, (float)pacman::font::glyph::SIZE * 2.0f);
 					}
 
 					al_translate_transform(&t, point.x, point.y);
@@ -343,8 +343,8 @@ namespace pacman
 							for (int32_t i = 0; i < 2; ++i)
 							{
 								point_t p = point;
-								p.x += i * (float)pacman::font::glyph::size;
-								p.y += j * (float)pacman::font::glyph::size;
+								p.x += i * (float)pacman::font::glyph::SIZE;
+								p.y += j * (float)pacman::font::glyph::SIZE;
 
 								color_t color = color::map_rgba(palette[layers[layer + begin].color_index]);
 								uint8_t c = layers[layer + begin].character[index];

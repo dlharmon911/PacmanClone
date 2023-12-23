@@ -7,6 +7,8 @@ namespace pacman
 {
 	namespace color
 	{
+		static constexpr uint32_t MAGIC_PINK_RGB = 0xff00ff;
+
 		color_t map_rgba(uint32_t color);
 		color_t map_rgb(uint32_t color);
 		uint32_t unmap_rgb(color_t color);

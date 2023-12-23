@@ -3,23 +3,24 @@
 
 namespace pacman
 {
-	struct font_t
+	typedef struct font_t
 	{
-		int32_t m_start;
-		int32_t m_count;
-		bitmap_t** m_glyphs;
-	};
+		int32_t m_start{ 0 };
+		int32_t m_count{ 0 };
+		bitmap_t* m_bitmap{ nullptr };
+		bitmap_t** m_glyphs{ nullptr };
+	} font_t;
 
 	namespace font
 	{
-		struct glyph_t
+		typedef struct glyph_t
 		{
-			bitmap_t* m_bitmap;
-		};
+			bitmap_t* m_bitmap{ nullptr };
+		} glyph_t;
 
 		font_t* create_default()
 		{
-			static const uint8_t default_font_data[256][glyph::size] =
+			static const uint8_t default_font_data[256][glyph::SIZE] =
 			{
 				{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 				{ 0x7e, 0x81, 0xa5, 0x81, 0xbd, 0x99, 0x81, 0x7e},
@@ -292,41 +293,66 @@ namespace pacman
 
 				if (font)
 				{
-					font->m_start = start;
-					font->m_count = count;
-					font->m_glyphs = new bitmap_t * [count];
+					static int32_t ROW_SHIFT = 4;
+					static int32_t ROW_SIZE = 1 << ROW_SHIFT;
 
-					if (font->m_glyphs)
+					font->m_start = 0;
+					font->m_count = 0;
+					font->m_bitmap = nullptr;
+					font->m_glyphs = nullptr;
+
+					int32_t width = ROW_SIZE;
+					int32_t height = (count >> ROW_SHIFT);
+					if (count % ROW_SIZE) ++height;
+					font->m_bitmap = al_create_bitmap(width << font::glyph::SHIFT, height << font::glyph::SHIFT);
+
+					if (font->m_bitmap)
 					{
-						for (int32_t i = 0; i < count; ++i)
-						{
-							font->m_glyphs[i] = nullptr;
-						}
+						font->m_start = start;
+						font->m_count = count;
 
-						for (int32_t i = 0; i < count; ++i)
-						{
-							font->m_glyphs[i] = al_create_bitmap(glyph::size, glyph::size);
+						font->m_glyphs = new bitmap_t * [count];
 
-							if (font->m_glyphs[i])
+						if (font->m_glyphs)
+						{
+							for (int32_t i = 0; i < count; ++i)
 							{
-								glyph::set(reinterpret_cast<glyph_t*>(font->m_glyphs[i]), data + i * glyph::size);
+								font->m_glyphs[i] = nullptr;
 							}
-							else
+
+							for (int32_t i = 0; i < count; ++i)
 							{
-								for (int32_t j = 0; j < count; ++j)
+								int32_t x = (i % ROW_SIZE) << font::glyph::SHIFT;
+								int32_t y = (i >> ROW_SHIFT) << font::glyph::SHIFT;
+
+								font->m_glyphs[i] = al_create_sub_bitmap(font->m_bitmap, x, y, glyph::SIZE, glyph::SIZE);
+
+								if (font->m_glyphs[i])
 								{
-									al_destroy_bitmap(font->m_glyphs[j]);
+									glyph::set(reinterpret_cast<glyph_t*>(font->m_glyphs[i]), data + i * glyph::SIZE);
 								}
-								delete[] font->m_glyphs;
-								delete font;
-								font = nullptr;
-								i = count;
+								else
+								{
+									for (int32_t j = 0; j < count; ++j)
+									{
+										al_destroy_bitmap(font->m_glyphs[j]);
+									}
+									delete[] font->m_glyphs;
+									delete font;
+									font = nullptr;
+									i = count;
+								}
 							}
+						}
+						else
+						{
+							font::destroy(font);
+							font = nullptr;
 						}
 					}
 					else
 					{
-						delete font;
+						font::destroy(font);
 						font = nullptr;
 					}
 				}
@@ -347,7 +373,21 @@ namespace pacman
 					}
 					delete[] font->m_glyphs;
 				}
+
+				if (font->m_bitmap)
+				{
+					al_destroy_bitmap(font->m_bitmap);
+				}
+
 				delete font;
+			}
+		}
+
+		namespace bitmap
+		{
+			bitmap_t* get(font_t* font)
+			{
+				return font->m_bitmap;
 			}
 		}
 
@@ -379,17 +419,17 @@ namespace pacman
 
 					al_lock_bitmap(bitmap, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_WRITEONLY);
 
-					for (int32_t j = 0; j < glyph::size; ++j)
+					for (int32_t j = 0; j < glyph::SIZE; ++j)
 					{
 						uint8_t p = data[j];
-						for (int32_t i = 0; i < glyph::size; ++i)
+						for (int32_t i = 0; i < glyph::SIZE; ++i)
 						{
 							float c = 0.0f;
 							if (p & 0x1)
 							{
 								c = 1.0f;
 							}
-							al_put_pixel((glyph::size - 1) - i, j, al_map_rgba_f(c, c, c, c));
+							al_put_pixel((glyph::SIZE - 1) - i, j, al_map_rgba_f(c, c, c, c));
 							p = p >> 1;
 						}
 					}
@@ -403,8 +443,8 @@ namespace pacman
 
 			bool set(glyph_t* glyph, const std::string& string_16)
 			{
-				uint8_t data[glyph::size] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-				for (int32_t i = 0; i < (glyph::size << 1); i = i + 2)
+				uint8_t data[glyph::SIZE] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+				for (int32_t i = 0; i < (glyph::SIZE << 1); i = i + 2)
 				{
 					uint32_t h = hex::from_char(string_16.at(i));
 					uint32_t l = hex::from_char(string_16.at(i + 1));
@@ -441,14 +481,14 @@ namespace pacman
 				float x = point.x;
 				float y = point.y;
 				float length = (float)text.length();
-				float w = (length * (float)glyph::size);
+				float w = (length * (float)glyph::SIZE);
 
-				if (alignment == alignment_t::right)
+				if (alignment == alignment_t::RIGHT)
 				{
 					x -= w;
 				}
 
-				if (alignment == alignment_t::centre)
+				if (alignment == alignment_t::CENTRE)
 				{
 					x -= (w * 0.5f);
 				}
@@ -458,7 +498,7 @@ namespace pacman
 					point_t p = { x, y };
 
 					draw(font, color, p, c);
-					x += (float)glyph::size;
+					x += (float)glyph::SIZE;
 				}
 			}
 		}
@@ -478,16 +518,16 @@ namespace pacman
 			draw(font, color, point, alignment, std::string(buffer));
 		}
 
-		void get_data(bitmap_t* bitmap, uint8_t data[glyph::size], int32_t x = 0, int32_t y = 0)
+		void get_data(bitmap_t* bitmap, uint8_t data[glyph::SIZE], int32_t x = 0, int32_t y = 0)
 		{
 			al_lock_bitmap(bitmap, ALLEGRO_PIXEL_FORMAT_ANY, ALLEGRO_LOCK_READONLY);
 			int32_t white = 0xffffffff;
 
-			for (int32_t j = 0; j < glyph::size; ++j)
+			for (int32_t j = 0; j < glyph::SIZE; ++j)
 			{
 				data[j] = 0;
 
-				for (int32_t i = 0; i < glyph::size; ++i)
+				for (int32_t i = 0; i < glyph::SIZE; ++i)
 				{
 					int32_t pixel = color::unmap_rgba(al_get_pixel(bitmap, x + i, y + j));
 
@@ -521,7 +561,7 @@ namespace pacman
 					f << "\t\t\"data\":\n\t\t[\n";
 					for (int32_t index = 0; index < font->m_count; ++index)
 					{
-						uint8_t data[glyph::size] =
+						uint8_t data[glyph::SIZE] =
 						{
 							0, 0, 0, 0, 0, 0, 0, 0
 						};
@@ -530,14 +570,14 @@ namespace pacman
 
 						get_data(font->m_glyphs[index], data);
 
-						for (int32_t j = 0; j < glyph::size; ++j)
+						for (int32_t j = 0; j < glyph::SIZE; ++j)
 						{
 							out.append("0x");
 
 							out.push_back(hex::to_char((data[j] & 0xf0) >> 4));
 							out.push_back(hex::to_char(data[j] & 0xf));
 							
-							if (j < (glyph::size - 1))
+							if (j < (glyph::SIZE - 1))
 							{
 								out.append(", ");
 							}
@@ -621,7 +661,7 @@ namespace pacman
 				return nullptr;
 			}
 
-			uint8_t* data = new uint8_t[count * glyph::size];
+			uint8_t* data = new uint8_t[count * glyph::SIZE];
 			if (!data)
 			{
 				return nullptr;
@@ -639,7 +679,7 @@ namespace pacman
 					return nullptr;
 				}
 
-				for (int32_t j = 0; j < glyph::size; ++j)
+				for (int32_t j = 0; j < glyph::SIZE; ++j)
 				{
 					size_t i = (size_t)(j << 1);
 
@@ -649,7 +689,7 @@ namespace pacman
 					data[index + j] = l + (h << 4);
 				}
 
-				index += glyph::size;
+				index += glyph::SIZE;
 			}
 
 			f.close();
@@ -671,10 +711,10 @@ namespace pacman
 				return nullptr;
 			}
 
-			int32_t width = al_get_bitmap_width(bitmap) / glyph::size;
-			int32_t height = al_get_bitmap_height(bitmap) / glyph::size;
+			int32_t width = al_get_bitmap_width(bitmap) / glyph::SIZE;
+			int32_t height = al_get_bitmap_height(bitmap) / glyph::SIZE;
 
-			uint8_t* data = new uint8_t[width * height * glyph::size];
+			uint8_t* data = new uint8_t[width * height * glyph::SIZE];
 			if (!data)
 			{
 				al_destroy_bitmap(bitmap);
@@ -686,7 +726,7 @@ namespace pacman
 				for (int32_t i = 0; i < width; ++i)
 				{
 					int32_t index = i + (j * width);
-					get_data(bitmap, data + index * glyph::size, i * glyph::size, j * glyph::size);
+					get_data(bitmap, data + index * glyph::SIZE, i * glyph::SIZE, j * glyph::SIZE);
 				}
 			}
 
@@ -716,7 +756,7 @@ namespace pacman
 					f << "\t\t\"data\":\n\t\t[\n";
 					for (int32_t index = 0; index < font->m_count; ++index)
 					{
-						uint8_t data[glyph::size] =
+						uint8_t data[glyph::SIZE] =
 						{
 							0, 0, 0, 0, 0, 0, 0, 0
 						};
@@ -725,7 +765,7 @@ namespace pacman
 
 						get_data(font->m_glyphs[index], data);
 
-						for (int32_t j = 0; j < glyph::size; ++j)
+						for (int32_t j = 0; j < glyph::SIZE; ++j)
 						{
 							out.push_back(hex::to_char((data[j] & 0xf0) >> 4));
 							out.push_back(hex::to_char(data[j] & 0xf));
